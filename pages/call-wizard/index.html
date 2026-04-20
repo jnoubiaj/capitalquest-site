@@ -1937,14 +1937,25 @@ const SAM_STAGES = [
 <p>"That's not a maybe — that's based on what we're seeing right now."</p>
 <p>"<strong>Sound good?</strong>"</p>
 <p><span class="direction">[Say it with conviction. The word "definitely" is intentional — it removes doubt and creates certainty. If they push back on the range, go to the tier breakdown in the tools panel.]</span></p>`
+      },
+      {
+        label:'The 2x–2.5x Rule',
+        heading:'Educate — make them feel like insiders',
+        body:`<p>"Let me show you something most people don't know about how this works."</p>
+<p>"We can typically get you <strong>2x to 2.5x your total personal credit limits</strong> in business funding. So if your personal limits are <span class="fill" data-field="pLimit">$X</span>, we're looking at pulling <span class="fill" data-field="fundingLow">$X</span> to <span class="fill" data-field="fundingHigh">$X</span> in business credit."</p>
+<p>"Why? Banks need to see you've handled high limits responsibly on the personal side before they'll trust you with business lines. Your personal profile is the proof."</p>
+<p>"<span class="direction">If their limits are low:</span> This is also why step one might be getting your personal limits raised first — otherwise we're leaving money on the table. That's part of what funding prep covers."</p>`
       }
     ],
     prompts:[
       'Delivered the range with full conviction — no hedging',
-      'Got a "cool" or confirmation before moving on'
+      'Got a "cool" or confirmation before moving on',
+      'Explained the 2x–2.5x rule',
+      'Addressed low limits if applicable'
     ]
   }
 ];
+
 
 let samCurrent = 0;
 const samCompleted = new Set();
