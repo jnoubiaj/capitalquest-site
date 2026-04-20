@@ -603,7 +603,7 @@ input,select,textarea{font-family:inherit;font-size:14px;color:inherit}
     <!-- Nav buttons -->
     <div class="stage-nav">
       <button class="btn" id="btnPrev" onclick="prevStage()">← Previous</button>
-      <button class="btn" onclick="openModal('objections')" style="border-color:var(--danger);color:var(--danger)">⚠ Objection</button>
+      <button class="btn" onclick="window.appMode==='setter'?openSetterObj('s_notinterested'):openModal('objections')" style="border-color:var(--danger);color:var(--danger)">⚠ Objection</button>
       <button class="btn-primary btn" id="btnNext" onclick="nextStage()">Next Stage →</button>
     </div>
 
@@ -659,14 +659,6 @@ input,select,textarea{font-family:inherit;font-size:14px;color:inherit}
   </aside>
 </div>
 
-<!-- ============== SETTER VIEW ============== -->
-<div id="setterView" style="display:none;max-width:860px;margin:0 auto;padding:32px 24px;display:none">
-  <div style="margin-bottom:28px">
-    <h2 style="font-size:22px;font-weight:600;color:var(--ink);letter-spacing:-.02em">Setter Script</h2>
-    <p style="color:var(--muted);font-size:13px;margin-top:4px">Use this flow to qualify prospects and book them onto a closer call.</p>
-  </div>
-  <div id="setterContent"></div>
-</div>
 
 <!-- ============== MODAL ============== -->
 <div class="modal-back" id="modalBack">
@@ -1422,14 +1414,25 @@ function goto(i){
 }
 
 function nextStage(){
-  completed.add(current);
-  if(current < STAGES.length-1){
-    current++;
-    renderStage(current);
-    window.scrollTo({top:0,behavior:'smooth'});
+  if(window.appMode==='setter'){
+    setterCompleted.add(setterCurrent);
+    if(setterCurrent < SETTER_STAGES.length-1){
+      setterCurrent++;
+      renderSetterStage(setterCurrent);
+      window.scrollTo({top:0,behavior:'smooth'});
+    } else {
+      alert('Setter call complete! Prospect booked.');
+    }
   } else {
-    downloadSummaryPDF();
-    openModal('summary');
+    completed.add(current);
+    if(current < STAGES.length-1){
+      current++;
+      renderStage(current);
+      window.scrollTo({top:0,behavior:'smooth'});
+    } else {
+      downloadSummaryPDF();
+      openModal('summary');
+    }
   }
 }
 
@@ -1548,10 +1551,10 @@ function downloadSummaryPDF(){
 }
 
 function prevStage(){
-  if(current>0){
-    current--;
-    renderStage(current);
-    window.scrollTo({top:0,behavior:'smooth'});
+  if(window.appMode==='setter'){
+    if(setterCurrent>0){ setterCurrent--; renderSetterStage(setterCurrent); window.scrollTo({top:0,behavior:'smooth'}); }
+  } else {
+    if(current>0){ current--; renderStage(current); window.scrollTo({top:0,behavior:'smooth'}); }
   }
 }
 
@@ -1612,100 +1615,312 @@ function openModal(kind, category){
   back.classList.add('open');
 }
 
-function setMode(mode){
-  const layout = document.querySelector('.layout');
-  const setterView = document.getElementById('setterView');
-  document.getElementById('modeCloser').classList.toggle('active', mode==='closer');
-  document.getElementById('modeSetter').classList.toggle('active', mode==='setter');
-  if(mode==='setter'){
-    layout.style.display = 'none';
-    setterView.style.display = 'block';
-    document.getElementById('setterContent').innerHTML = renderSetterScript();
-  } else {
-    layout.style.display = '';
-    setterView.style.display = 'none';
-  }
-}
-
-function renderSetterScript(){
-  const SETTER_STAGES = [
-    {
-      label:'Stage 01',
-      heading:'Opening — Pattern Interrupt',
-      highlight:true,
-      content:`<p>"Hey, is this <strong>[First Name]</strong>?"</p>
-<p><em>[They say yes]</em></p>
-<p>"Hey <strong>[Name]</strong>, this is <strong>[Your Name]</strong> calling from Capital Quest. I'll be straight with you — this is a bit of a cold call, but I think you'd want to hear this. Do you have literally 60 seconds?"</p>
-<div style="background:var(--surface-2);border-radius:6px;padding:10px 14px;margin-top:10px;font-size:13px;color:var(--muted)"><strong style="color:var(--ink-soft)">Why this works:</strong> Asking for 60 seconds instead of "a few minutes" lowers resistance. Being upfront about it being a cold call builds instant credibility.</div>`
-    },
-    {
-      label:'Stage 02',
-      heading:'Hook — The One-Liner',
-      highlight:true,
-      content:`<p>"We work with business owners to get them <strong>$35k to $100k+ in 0% interest business credit</strong> — done for you, no collateral, no revenue requirements."</p>
+/* ========== SETTER STAGES ========== */
+const SETTER_STAGES = [
+  {
+    id:'s_open',
+    title:'Opening',
+    meta:'Stage 01 · ~30 sec',
+    blocks:[
+      {
+        label:'Pattern Interrupt',
+        heading:'Get permission to talk',
+        highlight:true,
+        body:`<p>"Hey, is this <span class="fill" data-field="pName">Name</span>?"</p>
+<p><span class="direction">[They say yes]</span></p>
+<p>"Hey <span class="fill" data-field="pName">Name</span>, this is <strong>[Your Name]</strong> calling from Capital Quest. I'll be straight with you — this is a bit of a cold call, but I think you'd want to hear this. Do you have literally 60 seconds?"</p>
+<p class="direction">Asking for 60 seconds (not "a few minutes") lowers resistance. Being upfront about the cold call builds instant credibility.</p>`
+      }
+    ],
+    prompts:['Got a yes to 60 seconds','Tone is warm and unhurried']
+  },
+  {
+    id:'s_hook',
+    title:'Hook',
+    meta:'Stage 02 · ~30 sec',
+    blocks:[
+      {
+        label:'One-Liner',
+        heading:'Land the hook fast',
+        highlight:true,
+        body:`<p>"We work with business owners to get them <strong>$35k to $100k+ in 0% interest business credit</strong> — done for you, no collateral, no revenue requirements."</p>
 <p>"I pulled your info because it looks like you may qualify. I'm not here to pitch you anything today — I just want to see if it's even worth having a real conversation."</p>`
-    },
-    {
-      label:'Stage 03',
-      heading:'Qualify — 3 Fast Questions',
-      content:`<p>"Just a few quick ones so I don't waste your time:"</p>
-<ol style="margin:10px 0 10px 20px;line-height:2">
+      }
+    ],
+    prompts:['Delivered the hook clean','Did NOT pitch further — stopped at "real conversation"']
+  },
+  {
+    id:'s_qualify',
+    title:'Qualify',
+    meta:'Stage 03 · ~2 min',
+    blocks:[
+      {
+        label:'3 Fast Questions',
+        heading:'Pre-qualify before you pitch',
+        body:`<p>"Just a few quick ones so I don't waste your time:"</p>
+<ol style="margin:10px 0 10px 20px;line-height:2.2">
   <li>"Do you have a business or are you working on something?"</li>
   <li>"And your personal credit — ballpark, are we talking 680+?"</li>
   <li>"If the numbers made sense, is capital access something you're actively looking at right now — or more down the road?"</li>
-</ol>
-<div style="background:var(--surface-2);border-radius:6px;padding:10px 14px;font-size:13px;color:var(--muted)"><strong style="color:var(--ink-soft)">Green light to book:</strong> Has a business or idea · Credit 680+ · Open to capital now or within 30–60 days</div>`
-    },
-    {
-      label:'Stage 04',
-      heading:'Bridge — Build the Appointment',
-      highlight:true,
-      content:`<p>"OK — based on what you just told me, it sounds like this could be a real fit."</p>
+</ol>`
+      },
+      {
+        label:'Green Light',
+        heading:'Criteria to book',
+        body:`<ul>
+<li>Has a business or idea in motion</li>
+<li>Personal credit <strong>680+</strong></li>
+<li>Open to capital now or within <strong>30–60 days</strong></li>
+</ul>
+<p>If they don't hit all three — be honest. "It sounds like the timing might not be right just yet. Can I follow up in [X weeks]?"</p>`
+      }
+    ],
+    prompts:['Asked all 3 questions','Confirmed green light before moving forward']
+  },
+  {
+    id:'s_bridge',
+    title:'Build the Appt',
+    meta:'Stage 04 · ~1 min',
+    blocks:[
+      {
+        label:'Bridge',
+        heading:'Transition to the booking',
+        highlight:true,
+        body:`<p>"OK — based on what you just told me, it sounds like this could be a real fit."</p>
 <p>"What we'd do is get you on a call with one of our senior funding advisors. They'll pull up your credit profile, walk you through exactly what you'd qualify for, and give you the full picture — no obligation, no pitch, just numbers."</p>
-<p>"The whole call is usually about 45 minutes. We've helped 300+ business owners get funded and we've tracked a <strong>97% success rate</strong> at securing $35k or more."</p>`
-    },
-    {
-      label:'Stage 05',
-      heading:'Set the Appointment',
-      highlight:true,
-      content:`<p>"I've got availability <strong>[Day]</strong> at <strong>[Time A]</strong> or <strong>[Time B]</strong> — which works better for you?"</p>
-<p><em>[They pick a time]</em></p>
+<p>"The whole call is about 45 minutes. We've helped <strong>300+ business owners</strong> get funded — and we've tracked a <strong>97% success rate</strong> at securing $35k or more."</p>`
+      }
+    ],
+    prompts:['Positioned the closer call as discovery, not a pitch','Dropped the 97% stat']
+  },
+  {
+    id:'s_book',
+    title:'Set Appointment',
+    meta:'Stage 05 · ~1 min',
+    blocks:[
+      {
+        label:'Two-Choice Close',
+        heading:'Lock in the time',
+        highlight:true,
+        body:`<p>"I've got availability <strong>[Day]</strong> at <strong>[Time A]</strong> or <strong>[Time B]</strong> — which works better for you?"</p>
+<p><span class="direction">[They pick a time]</span></p>
 <p>"Perfect. I'm going to send you a confirmation to <strong>[email/number]</strong>. The call will come from our team — just pick up and they'll take it from there."</p>
 <p>"One thing — we only hold these spots for people who are serious about showing up. You good to commit to that time?"</p>`
-    },
-    {
-      label:'Stage 06',
-      heading:'Confirm & Close the Loop',
-      content:`<p>"Great — you're locked in for <strong>[Day + Time]</strong>."</p>
+      }
+    ],
+    prompts:['Used two-choice close — did NOT ask "when are you free?"','Got a verbal commitment to show up']
+  },
+  {
+    id:'s_confirm',
+    title:'Confirm & Close',
+    meta:'Stage 06 · ~30 sec',
+    blocks:[
+      {
+        label:'Lock It In',
+        heading:'End clean',
+        body:`<p>"Great — you're locked in for <strong>[Day + Time]</strong>."</p>
 <p>"Between now and then, don't do anything with your credit — no new applications, no big purchases on your cards. That protects your profile going into the call."</p>
 <p>"You'll get a reminder the day before. Any questions before then, just reply to the confirmation."</p>
-<p>"Talk soon, <strong>[Name]</strong> — looking forward to it."</p>`
-    },
-    {
-      label:'Objections',
-      heading:'Setter Objection Handles',
-      content:`
-<div class="obj-item"><div class="obj-item-q">"What is this about / how'd you get my number?"</div><div class="obj-item-a">"Totally fair — I pulled your info from a database of business owners in your area. I'm not here to sell you anything today. I just want to see if what we do is even relevant to your situation. Can I get 60 seconds to explain?"</div></div>
-<div class="obj-item"><div class="obj-item-q">"I'm not interested"</div><div class="obj-item-a">"No problem at all. Can I ask — is that because you already have all the capital you need, or more that the timing's off right now?"<br><em>(If timing: "Got it — when would be a better time to circle back?")</em></div></div>
-<div class="obj-item"><div class="obj-item-q">"Is this a loan?"</div><div class="obj-item-a">"Not a loan — it's business credit. No personal guarantee, no collateral, 0% interest for the first 12–18 months. It's structured completely differently from traditional financing."</div></div>
-<div class="obj-item"><div class="obj-item-q">"Send me information first"</div><div class="obj-item-a">"Absolutely — I can do that. The thing is, what you qualify for is specific to your profile, so a generic brochure won't give you real numbers. The call is really the only way to get accurate info. Can we lock in a time and I'll send the confirmation alongside the overview?"</div></div>
-<div class="obj-item"><div class="obj-item-q">"I don't have time right now"</div><div class="obj-item-a">"Totally get it — that's exactly why I'm calling ahead of time instead of just booking you. What does your schedule look like later this week or early next?"</div></div>`
-    }
-  ];
+<p>"Talk soon, <span class="fill" data-field="pName">Name</span> — looking forward to it."</p>`
+      }
+    ],
+    prompts:['Gave the credit hygiene instruction','Confirmed reminder is going out','Ended with prospect\'s name']
+  }
+];
 
-  let html = `<div style="display:flex;flex-direction:column;gap:20px">`;
-  SETTER_STAGES.forEach((s,i)=>{
-    const bg = s.highlight ? 'background:var(--brand-bg);border-color:var(--brand)' : 'background:var(--surface);border-color:var(--line)';
-    html += `<div style="border:1px solid;border-radius:10px;padding:18px 20px;${bg}">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
-        <span style="font-size:10px;font-weight:600;letter-spacing:.08em;color:var(--muted);text-transform:uppercase">${s.label}</span>
-      </div>
-      <h3 style="font-size:16px;font-weight:600;color:var(--ink);margin-bottom:12px;letter-spacing:-.015em">${s.heading}</h3>
-      <div style="font-size:14px;line-height:1.7;color:var(--ink-soft)">${s.content}</div>
+const SETTER_OBJECTIONS = {
+  s_number:{
+    title:'"What is this / how\'d you get my number?"',
+    groups:[{title:'',items:[{
+      q:'Response',
+      a:'"Totally fair — I pulled your info from a database of business owners in your area. I\'m not here to sell you anything today. I just want to see if what we do is even relevant to your situation. Can I get 60 seconds to explain?"'
+    }]}]
+  },
+  s_notinterested:{
+    title:'"I\'m not interested"',
+    groups:[{title:'',items:[{
+      q:'Response',
+      a:'"No problem at all. Can I ask — is that because you already have all the capital you need, or more that the timing\'s off right now?"<br><br><em>If timing: "Got it — when would be a better time to circle back?"</em>'
+    }]}]
+  },
+  s_loan:{
+    title:'"Is this a loan?"',
+    groups:[{title:'',items:[{
+      q:'Response',
+      a:'"Not a loan — it\'s business credit. No personal guarantee, no collateral, 0% interest for the first 12–18 months. It\'s structured completely differently from traditional financing."'
+    }]}]
+  },
+  s_sendinfo:{
+    title:'"Send me information first"',
+    groups:[{title:'',items:[{
+      q:'Response',
+      a:'"Absolutely — I can do that. The thing is, what you qualify for is specific to your profile, so a generic overview won\'t give you real numbers. The call is really the only way to get accurate info. Can we lock in a time and I\'ll send the confirmation alongside an overview?"'
+    }]}]
+  },
+  s_notime:{
+    title:'"I don\'t have time right now"',
+    groups:[{title:'',items:[{
+      q:'Response',
+      a:'"Totally get it — that\'s exactly why I\'m calling ahead of time instead of just booking you. What does your schedule look like later this week or early next?"'
+    }]}]
+  }
+};
+
+let setterCurrent = 0;
+const setterCompleted = new Set();
+const setterNotes = {};
+
+function setMode(mode){
+  window.appMode = mode;
+  document.getElementById('modeCloser').classList.toggle('active', mode==='closer');
+  document.getElementById('modeSetter').classList.toggle('active', mode==='setter');
+  document.querySelector('.nav-label').textContent = mode==='setter' ? 'Setter Flow' : 'Call Flow';
+  if(mode==='setter'){
+    setterCurrent = 0;
+    renderSetterNav();
+    renderSetterStage(0);
+    renderSetterPanel();
+    document.querySelector('.info-strip').style.display = 'none';
+  } else {
+    renderNav();
+    renderStage(current);
+    renderCloserPanel();
+    document.querySelector('.info-strip').style.display = '';
+  }
+}
+
+function renderSetterNav(){
+  const list = document.getElementById('navList');
+  list.innerHTML = SETTER_STAGES.map((s,i)=>`
+    <li class="nav-item ${i===setterCurrent?'active':''} ${setterCompleted.has(i)?'done':''}" onclick="gotoSetter(${i})">
+      <span class="idx">0${i+1}</span>
+      <span>${s.title}</span>
+      <span class="check">${setterCompleted.has(i)?'✓':''}</span>
+    </li>
+  `).join('');
+}
+
+function renderSetterStage(i){
+  const s = SETTER_STAGES[i];
+  document.getElementById('stageTitle').innerHTML = s.title;
+  document.getElementById('stageMeta').textContent = s.meta;
+  let html = '';
+  s.blocks.forEach(b=>{
+    const cls = b.highlight?'script-block highlight':'script-block';
+    html += `<div class="${cls}">
+      <div class="script-block-head"><span class="script-label">${b.label}</span></div>
+      <h2 class="script-heading">${b.heading}</h2>
+      <div class="script-body">${fillTokens(b.body)}</div>
     </div>`;
   });
-  html += `</div>`;
-  return html;
+  if(s.prompts && s.prompts.length){
+    html += `<div class="script-block"><div class="script-block-head"><span class="script-label">Checklist</span></div><div class="prompts">`;
+    s.prompts.forEach((p,pi)=>{
+      const key = `setter-${s.id}-${pi}`;
+      const checked = promptChecks[key]?'checked':'';
+      html += `<div class="prompt ${checked}" onclick="togglePrompt('${key}')"><div class="prompt-check">✓</div><div class="prompt-text">${p}</div></div>`;
+    });
+    html += `</div></div>`;
+  }
+  html += `<div class="notes-block">
+    <label>Notes — ${s.title}</label>
+    <textarea oninput="setterNotes['${s.id}']=this.value" placeholder="Reactions, flags, details to pass to closer…">${setterNotes[s.id]||''}</textarea>
+  </div>`;
+  document.getElementById('stageContent').innerHTML = html;
+  document.getElementById('btnPrev').disabled = i===0;
+  document.getElementById('btnPrev').style.opacity = i===0?'.4':'1';
+  document.getElementById('btnNext').textContent = i===SETTER_STAGES.length-1?'Finish Setter Call ✓':'Next Stage →';
+  renderSetterNav();
+}
+
+function renderSetterPanel(){
+  const tools = document.querySelector('.tools');
+  let html = `<div class="tool-section">
+    <div class="tool-head">Qualifier Checklist</div>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
+      <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-soft);cursor:pointer"><input type="checkbox" style="accent-color:var(--brand)"> Has a business or idea</label>
+      <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-soft);cursor:pointer"><input type="checkbox" style="accent-color:var(--brand)"> Credit 680+</label>
+      <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-soft);cursor:pointer"><input type="checkbox" style="accent-color:var(--brand)"> Open to capital now or 30–60 days</label>
+    </div>
+  </div>
+  <div class="tool-section">
+    <div class="tool-head">Quick Objections</div>
+    <button class="obj-cat" onclick="openSetterObj('s_number')"><span class="obj-num">01</span> "How'd you get my number?"</button>
+    <button class="obj-cat" onclick="openSetterObj('s_notinterested')" style="border-color:var(--danger);color:var(--danger)"><span class="obj-num">!</span> "Not interested"</button>
+    <button class="obj-cat" onclick="openSetterObj('s_loan')"><span class="obj-num">02</span> "Is this a loan?"</button>
+    <button class="obj-cat" onclick="openSetterObj('s_sendinfo')"><span class="obj-num">03</span> "Send info first"</button>
+    <button class="obj-cat" onclick="openSetterObj('s_notime')"><span class="obj-num">04</span> "No time right now"</button>
+  </div>
+  <div class="tool-section">
+    <div class="tool-head">Prospect Info</div>
+    <div class="info-field" style="margin-bottom:10px"><label>Name</label><input type="text" id="sName" placeholder="John Doe"></div>
+    <div class="info-field" style="margin-bottom:10px"><label>Credit (ballpark)</label><input type="text" id="sScore" placeholder="680+, 720, etc."></div>
+    <div class="info-field"><label>Appt Time</label><input type="text" id="sAppt" placeholder="Thurs 2pm EST"></div>
+  </div>`;
+  tools.innerHTML = html;
+}
+
+function renderCloserPanel(){
+  const tools = document.querySelector('.tools');
+  tools.innerHTML = `
+    <div class="tool-section">
+      <div class="tool-head">Tier Recommendation</div>
+      <div class="tier-result" id="tierResult"><div class="tier-label">Awaiting Data</div><div class="tier-name">—</div><div class="tier-range">Enter prospect info</div></div>
+      <div class="tier-criteria" id="tierCriteria">Fill in credit score, utilization, and credit age above to see tier placement.</div>
+    </div>
+    <div class="tool-section">
+      <div class="tool-head">Funding Potential <span style="color:var(--brand);font-weight:500">· 2x–2.5x Rule</span></div>
+      <div class="potential-card empty" id="potentialCard">
+        <div class="potential-label">Personal CC Limits</div>
+        <div class="potential-input">—</div>
+        <div class="potential-arrow">↓</div>
+        <div class="potential-range" id="potentialRange">Enter total limits above</div>
+        <div class="potential-sub">Business funding potential</div>
+      </div>
+      <div class="tier-criteria">Banks lend 2–2.5x your personal limits. They need to see you handle high limits personally before trusting you on the business side.</div>
+    </div>
+    <div class="tool-section">
+      <div class="tool-head">Quick Objections</div>
+      <button class="obj-cat" onclick="openModal('objections','framework')" style="border-color:var(--brand);background:var(--brand-bg)"><span class="obj-num">★</span> <strong>ARP Framework</strong></button>
+      <button class="obj-cat" onclick="openModal('objections','price_early')" style="border-color:var(--danger);color:var(--danger)"><span class="obj-num">!</span> <strong>"What's your price?"</strong> (upfront)</button>
+      <button class="obj-cat" onclick="openModal('objections','uncertainty')"><span class="obj-num">01</span> Uncertainty</button>
+      <button class="obj-cat" onclick="openModal('objections','support')"><span class="obj-num">02</span> Need to check w/ someone</button>
+      <button class="obj-cat" onclick="openModal('objections','financial')"><span class="obj-num">03</span> Financial concern</button>
+      <button class="obj-cat" onclick="openModal('objections','upfront')"><span class="obj-num">04</span> "Why pay upfront?"</button>
+      <button class="obj-cat" onclick="openModal('objections','why35k')"><span class="obj-num">05</span> "Why only $35k?"</button>
+      <button class="obj-cat" onclick="openModal('objections','different')"><span class="obj-num">06</span> "What makes you different?"</button>
+    </div>
+    <div class="tool-section">
+      <div class="tool-head">Investment</div>
+      <div class="invest-card">
+        <div class="invest-price">$4,800</div>
+        <div class="invest-desc"><strong>PIF</strong> · <strong>2-pay:</strong> $2,500 now + $2,500 in 30d · <strong>Back-end:</strong> $2k + 8%</div>
+      </div>
+    </div>`;
+  calcTier();
+  calcPotential();
+}
+
+function openSetterObj(key){
+  const o = SETTER_OBJECTIONS[key];
+  if(!o) return;
+  const title = document.getElementById('modalTitle');
+  const body = document.getElementById('modalBody');
+  title.textContent = o.title;
+  let html = '';
+  o.groups.forEach(g=>{
+    g.items.forEach(it=>{
+      html += `<div class="obj-item"><div class="obj-item-q">${it.q}</div><div class="obj-item-a">${it.a}</div></div>`;
+    });
+  });
+  body.innerHTML = html;
+  document.getElementById('modalBack').classList.add('open');
+}
+
+function gotoSetter(i){
+  setterCurrent = i;
+  renderSetterStage(i);
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 function closeModal(){document.getElementById('modalBack').classList.remove('open')}
 document.getElementById('modalBack').addEventListener('click',e=>{if(e.target.id==='modalBack')closeModal()});
