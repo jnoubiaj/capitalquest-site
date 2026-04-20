@@ -1923,6 +1923,26 @@ const SAM_STAGES = [
       'Dropped all 4 proof points in one breath',
       'Got a "we\'re good" before moving on'
     ]
+  },
+  {
+    id:'sam_funding',
+    title:'Funding Amount',
+    meta:'Stage 04 · ~1 min',
+    blocks:[
+      {
+        label:'Commitment',
+        heading:'Lock in the range with certainty',
+        highlight:true,
+        body:`<p>"OK — based on your qualifiers and the data we have from our underwriting process and clients with profiles similar to yours, it looks like we're <strong>definitely</strong> going to get you between <span class="fill" data-field="tierRange">[tier range]</span> for your first round, within <span class="fill" data-field="tierTime">[X weeks]</span>."</p>
+<p>"That's not a maybe — that's based on what we're seeing right now."</p>
+<p>"<strong>Sound good?</strong>"</p>
+<p><span class="direction">[Say it with conviction. The word "definitely" is intentional — it removes doubt and creates certainty. If they push back on the range, go to the tier breakdown in the tools panel.]</span></p>`
+      }
+    ],
+    prompts:[
+      'Delivered the range with full conviction — no hedging',
+      'Got a "cool" or confirmation before moving on'
+    ]
   }
 ];
 
