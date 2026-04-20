@@ -1623,31 +1623,33 @@ const SETTER_STAGES = [
     meta:'Stage 01 · ~30 sec',
     blocks:[
       {
-        label:'Pattern Interrupt',
-        heading:'Get permission to talk',
+        label:'Warm Opener',
+        heading:'Reference the form — they raised their hand',
         highlight:true,
         body:`<p>"Hey, is this <span class="fill" data-field="pName">Name</span>?"</p>
 <p><span class="direction">[They say yes]</span></p>
-<p>"Hey <span class="fill" data-field="pName">Name</span>, this is <strong>[Your Name]</strong> calling from Capital Quest. I'll be straight with you — this is a bit of a cold call, but I think you'd want to hear this. Do you have literally 60 seconds?"</p>
-<p class="direction">Asking for 60 seconds (not "a few minutes") lowers resistance. Being upfront about the cold call builds instant credibility.</p>`
+<p>"Hey <span class="fill" data-field="pName">Name</span>! This is <strong>[Your Name]</strong> with Capital Quest — I'm reaching out because you filled out a form recently about business funding. I just wanted to follow up and make sure we got you taken care of. Do you have a few minutes?"</p>
+<p class="direction">They filled out the form — this is a warm call. Lead with that. It removes friction immediately and reminds them they expressed interest.</p>`
       }
     ],
-    prompts:['Got a yes to 60 seconds','Tone is warm and unhurried']
+    prompts:['Referenced the form right away','Tone is friendly and follow-up — not salesy']
   },
   {
     id:'s_hook',
-    title:'Hook',
-    meta:'Stage 02 · ~30 sec',
+    title:'Reconnect',
+    meta:'Stage 02 · ~1 min',
     blocks:[
       {
-        label:'One-Liner',
-        heading:'Land the hook fast',
+        label:'Remind & Reconnect',
+        heading:'Bring them back to why they filled it out',
         highlight:true,
-        body:`<p>"We work with business owners to get them <strong>$35k to $100k+ in 0% interest business credit</strong> — done for you, no collateral, no revenue requirements."</p>
-<p>"I pulled your info because it looks like you may qualify. I'm not here to pitch you anything today — I just want to see if it's even worth having a real conversation."</p>`
+        body:`<p>"So just to make sure I have the right person — you were looking into getting access to business funding, right?"</p>
+<p><span class="direction">[They confirm]</span></p>
+<p>"Perfect. So what we do is help business owners get <strong>$35k to $100k+ in 0% interest business credit</strong> — it's done for you, no collateral, no revenue requirements. That's what you were looking into when you filled out the form."</p>
+<p>"I just want to make sure we get you connected with the right person on our team so they can walk you through exactly what you'd qualify for."</p>`
       }
     ],
-    prompts:['Delivered the hook clean','Did NOT pitch further — stopped at "real conversation"']
+    prompts:['Got them to confirm their interest','Framed the call as follow-through — not a pitch']
   },
   {
     id:'s_qualify',
@@ -1730,10 +1732,10 @@ const SETTER_STAGES = [
 
 const SETTER_OBJECTIONS = {
   s_number:{
-    title:'"What is this / how\'d you get my number?"',
+    title:'"I don\'t remember filling anything out"',
     groups:[{title:'',items:[{
       q:'Response',
-      a:'"Totally fair — I pulled your info from a database of business owners in your area. I\'m not here to sell you anything today. I just want to see if what we do is even relevant to your situation. Can I get 60 seconds to explain?"'
+      a:'"No worries at all — you may have seen one of our ads on Facebook and filled out a short form about business funding. Either way, I\'m not here to pitch you anything — I just want to make sure the right person follows up with you. Does business funding still sound like something you\'re looking into?"'
     }]}]
   },
   s_notinterested:{
@@ -1845,7 +1847,7 @@ function renderSetterPanel(){
   </div>
   <div class="tool-section">
     <div class="tool-head">Quick Objections</div>
-    <button class="obj-cat" onclick="openSetterObj('s_number')"><span class="obj-num">01</span> "How'd you get my number?"</button>
+    <button class="obj-cat" onclick="openSetterObj('s_number')"><span class="obj-num">01</span> "I don't remember the form"</button>
     <button class="obj-cat" onclick="openSetterObj('s_notinterested')" style="border-color:var(--danger);color:var(--danger)"><span class="obj-num">!</span> "Not interested"</button>
     <button class="obj-cat" onclick="openSetterObj('s_loan')"><span class="obj-num">02</span> "Is this a loan?"</button>
     <button class="obj-cat" onclick="openSetterObj('s_sendinfo')"><span class="obj-num">03</span> "Send info first"</button>
