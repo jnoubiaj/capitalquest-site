@@ -645,6 +645,7 @@ input,select,textarea{font-family:inherit;font-size:14px;color:inherit}
       <button class="obj-cat" onclick="openModal('objections','why35k')"><span class="obj-num">05</span> "Why only $35k?"</button>
       <button class="obj-cat" onclick="openModal('objections','different')"><span class="obj-num">06</span> "What makes you different?"</button>
       <button class="obj-cat" onclick="openModal('objections','competitor')"><span class="obj-num">07</span> "Already working with someone"</button>
+      <button class="obj-cat" onclick="openModal('objections','diy')"><span class="obj-num">08</span> "I can do it on my own"</button>
     </div>
 
     <div class="tool-section">
@@ -1267,6 +1268,28 @@ const OBJECTIONS = {
       }
     ]
   },
+  diy:{
+    title:'"I can do this on my own"',
+    groups:[
+      {
+        title:'The Puzzle Reframe · ARP',
+        items:[
+          {
+            q:'The core truth',
+            a:'They\'re right — they technically can. But "can apply" and "getting the best outcome" are completely different things. Your edge is the relationships, the optimization, and the full system. A credit score is just one piece.'
+          },
+          {
+            q:'Prospect: "I can just apply for business credit myself"',
+            a:'<strong>🟢 Acknowledge:</strong> "You\'re right — you absolutely can. And honestly, if all it took was a 700+ credit score and filling out some applications, we wouldn\'t have a business."<br><br><strong>🟡 Respond:</strong> "Here\'s the reality: most people who go at it alone end up with low limits — because a good credit score is just one piece of the puzzle. We bring the relationships with the right banks, we optimize your full credit profile, and we make sure every piece fits together the right way. Having a 700+ score is not enough on its own. You cannot complete the entire puzzle with just one piece — you need all the pieces to fit right. That\'s exactly what we do."<br><br><strong>🔴 Pivot:</strong> "If going alone meant leaving $30k, $40k, even $50k on the table — would that still be worth it to you?"'
+          },
+          {
+            q:'If they push: "I\'ve done it before"',
+            a:'<strong>🟢 Acknowledge:</strong> "That\'s actually great — it means you already understand the space."<br><br><strong>🟡 Respond:</strong> "The difference is what you got versus what was available. Most self-applicants get approved but leave a significant amount on the table because they don\'t know which banks to hit, in what order, or how to position the profile beforehand. We\'ve seen clients who did it themselves get $20k — then come to us and get $75k on round two with the same credit profile, just optimized correctly."<br><br><strong>🔴 Pivot:</strong> "What did you end up getting when you did it on your own?"'
+          }
+        ]
+      }
+    ]
+  },
   why35k:{
     title:'"Why only $35k?" — Ceiling Question',
     groups:[
@@ -1800,6 +1823,13 @@ const SETTER_OBJECTIONS = {
       a:'"That\'s great — means you\'re serious about this. Here\'s a thought though: when you go grocery shopping, you don\'t just walk into the first store and buy everything there. You look for the best products, best prices, best deals — because it\'s your money. This is your biggest investment. Doesn\'t it deserve the same approach? All I\'m asking is for you to hop on a quick call with our advisor. If what you have is genuinely better, he\'ll tell you that himself. Worth a look?"'
     }]}]
   },
+  s_diy:{
+    title:'"I can do this on my own"',
+    groups:[{title:'',items:[{
+      q:'Response',
+      a:'"You\'re right — you can apply on your own. But here\'s the reality: most people who go at it alone end up with low limits, because a good credit score is just one piece of the puzzle. We bring the established bank relationships, we optimize your full credit profile, and we make sure every piece fits together the right way. Having a 700+ score is not enough on its own — you cannot complete the entire puzzle with just one piece. That\'s exactly what our advisor walks you through on the call. Worth 45 minutes to see the full picture?"'
+    }]}]
+  },
   s_price:{
     title:'"How much does it cost?"',
     groups:[{title:'',items:[{
@@ -1894,6 +1924,7 @@ function renderSetterPanel(){
     <button class="obj-cat" onclick="openSetterObj('s_sendinfo')"><span class="obj-num">03</span> "Send info first"</button>
     <button class="obj-cat" onclick="openSetterObj('s_notime')"><span class="obj-num">04</span> "No time right now"</button>
     <button class="obj-cat" onclick="openSetterObj('s_competitor')"><span class="obj-num">05</span> "Already working with someone"</button>
+    <button class="obj-cat" onclick="openSetterObj('s_diy')"><span class="obj-num">06</span> "I can do it on my own"</button>
     <button class="obj-cat" onclick="openSetterObj('s_price')" style="border-color:var(--danger);color:var(--danger)"><span class="obj-num">!</span> "How much does it cost?"</button>
   </div>
   <div class="tool-section" id="setterObjExpanded" style="display:none">
@@ -1940,6 +1971,7 @@ function renderCloserPanel(){
       <button class="obj-cat" onclick="openModal('objections','why35k')"><span class="obj-num">05</span> "Why only $35k?"</button>
       <button class="obj-cat" onclick="openModal('objections','different')"><span class="obj-num">06</span> "What makes you different?"</button>
       <button class="obj-cat" onclick="openModal('objections','competitor')"><span class="obj-num">07</span> "Already working with someone"</button>
+      <button class="obj-cat" onclick="openModal('objections','diy')"><span class="obj-num">08</span> "I can do it on my own"</button>
     </div>
     <div class="tool-section">
       <div class="tool-head">Investment</div>
