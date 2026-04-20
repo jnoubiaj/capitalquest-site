@@ -1823,9 +1823,9 @@ const SAM_STAGES = [
     ]
   },
   {
-    id:'sam_review',
-    title:'Review the Application',
-    meta:'Stage 02 · ~2 min',
+    id:'sam_convo',
+    title:'Discovery',
+    meta:'Stage 02 · ~5 min',
     blocks:[
       {
         label:'Review What You Know',
@@ -1840,23 +1840,10 @@ const SAM_STAGES = [
   <li>Business: <strong><span class="fill" data-field="pBiz">[business type]</span></strong></li>
 </ul>
 <p>"Before we dive in — does everything sound accurate?"</p>`
-      }
-    ],
-    prompts:[
-      'Had prospect info filled in before the call',
-      'Read it back naturally — didn\'t just recite it',
-      'Got confirmation everything is accurate before moving on'
-    ]
-  },
-  {
-    id:'sam_convo',
-    title:'Discovery',
-    meta:'Stage 03 · ~3 min',
-    blocks:[
+      },
       {
         label:'Business Discovery',
         heading:'Let them talk — listen for pain',
-        highlight:true,
         body:`<p>"Alright, cool — so tell me a little bit about your business. What do you do, and how long have you been in business for?"</p>
 <p><span class="direction">[Let them answer fully — don't interrupt. Take notes.]</span></p>`
       },
@@ -1874,6 +1861,7 @@ const SAM_STAGES = [
       }
     ],
     prompts:[
+      'Confirmed application info is accurate',
       'Asked about business — let them fully answer',
       'Identified whether they\'re starting or scaling',
       'Uncovered at least one pain point beyond funding',
