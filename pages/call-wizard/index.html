@@ -644,6 +644,7 @@ input,select,textarea{font-family:inherit;font-size:14px;color:inherit}
       <button class="obj-cat" onclick="openModal('objections','upfront')"><span class="obj-num">04</span> "Why pay upfront?"</button>
       <button class="obj-cat" onclick="openModal('objections','why35k')"><span class="obj-num">05</span> "Why only $35k?"</button>
       <button class="obj-cat" onclick="openModal('objections','different')"><span class="obj-num">06</span> "What makes you different?"</button>
+      <button class="obj-cat" onclick="openModal('objections','competitor')"><span class="obj-num">07</span> "Already working with someone"</button>
     </div>
 
     <div class="tool-section">
@@ -1240,6 +1241,32 @@ const OBJECTIONS = {
       }
     ]
   },
+  competitor:{
+    title:'"I\'m already working with someone else"',
+    groups:[
+      {
+        title:'The Grocery Store Reframe · ARP',
+        items:[
+          {
+            q:'The core principle',
+            a:'They\'re not off the market — they\'re just not exclusive. Your job is to earn the right to be compared, not to tear down the competitor. Validate the relationship, then open the door with a reframe they can\'t argue with.'
+          },
+          {
+            q:'Prospect: "I\'m already working with another company"',
+            a:'<strong>🟢 Acknowledge:</strong> "That\'s great — honestly, that tells me you\'re already serious about this, which is exactly the kind of person we work best with."<br><br><strong>🟡 Respond:</strong> "Here\'s something to think about though — when you go grocery shopping, you don\'t just walk into the first store you see and buy everything there. You\'re always looking for the best products, the best prices, the best deals. You shop around because it\'s your money. This is your biggest financial investment — doesn\'t it deserve the same approach?"<br><br><strong>🔴 Pivot:</strong> "All I\'m asking for is 10 minutes to show you what we bring to the table. If what they\'re offering is genuinely better, I\'ll tell you that myself. Fair enough?"'
+          },
+          {
+            q:'If they say "I\'m happy with them"',
+            a:'<strong>🟢 Acknowledge:</strong> "I\'m glad to hear that — happy clients are the best sign."<br><br><strong>🟡 Respond:</strong> "The question isn\'t whether they\'re good. The question is whether you\'re leaving money on the table by not knowing what else is out there. We\'ve had clients come to us after another company and get 30–40% more in funding just because of how we structure and optimize the profile."<br><br><strong>🔴 Pivot:</strong> "Would it be worth a quick comparison — just so you know for certain you\'re getting the best deal possible?"'
+          },
+          {
+            q:'If they\'re locked into a contract',
+            a:'<strong>🟢 Acknowledge:</strong> "Totally understand — contracts are contracts."<br><br><strong>🟡 Respond:</strong> "Here\'s what I\'d suggest: let\'s have the conversation now so you know exactly what\'s available. When that contract wraps up, you\'ll already have a clear picture of what round two looks like with us — and you won\'t be starting from zero."<br><br><strong>🔴 Pivot:</strong> "When does your current engagement end?"'
+          }
+        ]
+      }
+    ]
+  },
   why35k:{
     title:'"Why only $35k?" — Ceiling Question',
     groups:[
@@ -1765,6 +1792,13 @@ const SETTER_OBJECTIONS = {
       q:'Response',
       a:'"Totally get it — that\'s exactly why I\'m calling ahead of time instead of just booking you. What does your schedule look like later this week or early next?"'
     }]}]
+  },
+  s_competitor:{
+    title:'"I\'m already working with someone"',
+    groups:[{title:'',items:[{
+      q:'Response',
+      a:'"That\'s great — means you\'re serious about this. Here\'s a thought though: when you go grocery shopping, you don\'t just walk into the first store and buy everything there. You look for the best products, best prices, best deals — because it\'s your money. This is your biggest investment. Doesn\'t it deserve the same approach? All I\'m asking is for you to hop on a quick call with our advisor. If what you have is genuinely better, he\'ll tell you that himself. Worth a look?"'
+    }]}]
   }
 };
 
@@ -1852,6 +1886,7 @@ function renderSetterPanel(){
     <button class="obj-cat" onclick="openSetterObj('s_loan')"><span class="obj-num">02</span> "Is this a loan?"</button>
     <button class="obj-cat" onclick="openSetterObj('s_sendinfo')"><span class="obj-num">03</span> "Send info first"</button>
     <button class="obj-cat" onclick="openSetterObj('s_notime')"><span class="obj-num">04</span> "No time right now"</button>
+    <button class="obj-cat" onclick="openSetterObj('s_competitor')"><span class="obj-num">05</span> "Already working with someone"</button>
   </div>
   <div class="tool-section" id="setterObjExpanded" style="display:none">
     <div class="tool-head" id="setterObjTitle"></div>
@@ -1896,6 +1931,7 @@ function renderCloserPanel(){
       <button class="obj-cat" onclick="openModal('objections','upfront')"><span class="obj-num">04</span> "Why pay upfront?"</button>
       <button class="obj-cat" onclick="openModal('objections','why35k')"><span class="obj-num">05</span> "Why only $35k?"</button>
       <button class="obj-cat" onclick="openModal('objections','different')"><span class="obj-num">06</span> "What makes you different?"</button>
+      <button class="obj-cat" onclick="openModal('objections','competitor')"><span class="obj-num">07</span> "Already working with someone"</button>
     </div>
     <div class="tool-section">
       <div class="tool-head">Investment</div>
