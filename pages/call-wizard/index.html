@@ -635,6 +635,7 @@ input,select,textarea{font-family:inherit;font-size:14px;color:inherit}
       <button class="obj-cat" onclick="openModal('objections','financial')"><span class="obj-num">03</span> Financial concern</button>
       <button class="obj-cat" onclick="openModal('objections','upfront')"><span class="obj-num">04</span> "Why pay upfront?"</button>
       <button class="obj-cat" onclick="openModal('objections','why35k')"><span class="obj-num">05</span> "Why only $35k?"</button>
+      <button class="obj-cat" onclick="openModal('objections','different')"><span class="obj-num">06</span> "What makes you different?"</button>
     </div>
 
     <div class="tool-section">
@@ -1199,6 +1200,32 @@ const OBJECTIONS = {
           {
             q:'Reason 3 — We do it right',
             a:'"We optimize your funding profile, get you a fundable LLC, and introduce you to relationship managers. Cheaper option = cheaper results."'
+          }
+        ]
+      }
+    ]
+  },
+  different:{
+    title:'"What makes you different?" — Differentiation Question',
+    groups:[
+      {
+        title:'Own the Answer · ARP',
+        items:[
+          {
+            q:'The core answer',
+            a:'Most funding companies drop money in your lap and disappear. We don\'t just get you the capital — <strong>we teach you how to keep doing it on your own.</strong> You\'ll learn how to use other people\'s money to grow your business the right way, and we give you everything to keep going: support, tools, resources, and our lender network.'
+          },
+          {
+            q:'Prospect: "What makes you different from other funding companies?"',
+            a:'<strong>🟢 Acknowledge:</strong> "That\'s one of the best questions you can ask — and I\'m glad you did."<br><br><strong>🟡 Respond:</strong> "Three things set us apart. One — we pre-qualify before we pitch, so if we\'re talking, it\'s because we\'re confident we can get you funded. Two — we\'ve tracked a 97% success rate at securing $35k+ over the past few years across 300+ business owners. Three — we don\'t just get you the money and leave. We show you how to keep accessing capital on your own, long term, without paying interest or fees."<br><br><strong>🔴 Pivot:</strong> "Is that the kind of relationship you\'ve been looking for — or have the other companies you\'ve talked to been more transactional?"'
+          },
+          {
+            q:'Prospect: "I\'ve seen other companies offer the same thing"',
+            a:'<strong>🟢 Acknowledge:</strong> "Yeah, there\'s a lot of noise out there — totally fair."<br><br><strong>🟡 Respond:</strong> "The difference usually shows up in the execution. A lot of companies shotgun applications on day one, burn your credit, and you end up with low limits and no path to a second round. We optimize your profile first — fundable LLC, credit positioning, lender relationships — so round one is the foundation for everything after."<br><br><strong>🔴 Pivot:</strong> "Have you already gone through a process like that before, or is this your first time looking into business credit funding?"'
+          },
+          {
+            q:'Prospect: "Why should I trust you?"',
+            a:'<strong>🟢 Acknowledge:</strong> "I wouldn\'t trust anyone you just met either — that\'s the right instinct."<br><br><strong>🟡 Respond:</strong> "Here\'s what I\'d say: we don\'t take everyone. If your profile doesn\'t qualify, we tell you straight — because a failed funding hurts us too. The fact that we\'re still talking means we\'ve already looked at your numbers and believe we can deliver."<br><br><strong>🔴 Pivot:</strong> "What would it take for you to feel confident enough to move forward — is it more about the process, the results, or something else?"'
           }
         ]
       }
