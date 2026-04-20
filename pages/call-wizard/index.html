@@ -2003,6 +2003,141 @@ const SAM_STAGES = [
       'Got a question/acknowledgment after each step',
       'Delivery expectations clear'
     ]
+  },
+  {
+    id:'sam_tempcheck',
+    title:'Temperature Check',
+    meta:'Stage 06 · 1 min',
+    blocks:[
+      {
+        label:'Feel Check',
+        heading:'Get the temp read',
+        highlight:true,
+        body:`<p>"<strong>Investment aside</strong> — how do you feel about this process?"</p>
+<span class="direction">If they respond "feeling good":</span>
+<p>"Feeling good? <strong>Or do you feel like this is exactly what you need?</strong>"</p>
+<p>→ If answer is "it's just the price" / anything but total certainty, you're NOT ready to pitch investment yet. Circle back on what's missing.</p>`
+      },
+      {
+        label:'Transition',
+        heading:'Transition to price',
+        body:`<p>If they didn't ask for price:</p>
+<p>"Cool — ready for next steps?"</p>
+<p><span class="pause">WAIT FOR YES</span></p>
+<p>"Awesome — so I handle all the enrollment, takes just a few minutes. You'd process the investment with me, then we'd schedule your first onboarding launch call, and that gets sent over to my team to start working on your account. Make sense?"</p>
+<p><span class="pause">WAIT FOR YES</span></p>
+<p>"Cool if I share the investment?"</p>`
+      }
+    ],
+    prompts:[
+      'Got a DEFINITIVE "this is what I need"',
+      'Did NOT pitch price before getting certainty',
+      'Got permission to share investment'
+    ]
+  },
+  {
+    id:'sam_investment',
+    title:'The Investment',
+    meta:'Stage 07 · 1 min',
+    blocks:[
+      {
+        label:'The Ask',
+        heading:'Present the price',
+        highlight:true,
+        body:`<p>"Yeah — so the investment to get you between <span class="fill" data-field="tierRange">$xyz to $xyz</span> in 0% interest funding so you can <strong>[accomplish their goal]</strong> is just <strong>$4,800</strong>."</p>
+<p><span class="pause">BE QUIET</span> — do not speak first.</p>`
+      },
+      {
+        label:'Terms',
+        heading:'Terms to close NOW',
+        body:`<ul>
+<li><strong>PIF</strong> — pay in full</li>
+<li><strong>2-Pay Plan</strong> — $2,500 now, $2,500 in 30 days</li>
+<li><strong>Absolute worst case: Back-end %</strong> — $2k upfront + 8% on the back-end after funding (the $2k goes toward the %)</li>
+</ul>`
+      }
+    ],
+    prompts:[
+      'Price delivered cleanly, no apology',
+      'Went silent after the number',
+      'Did not offer payment plan unprompted'
+    ]
+  },
+  {
+    id:'sam_objections',
+    title:'Objection Handling',
+    meta:'Stage 08 · as needed',
+    blocks:[
+      {
+        label:'The Framework',
+        heading:'Acknowledge · Respond · Pivot',
+        highlight:true,
+        body:`<p>Every objection gets handled the same way. Memorize the pattern:</p>
+<ul>
+<li><strong>🟢 ACKNOWLEDGE</strong> — "Totally get that." / "No issue at all." / "Fair question." Never argue, never "but."</li>
+<li><strong>🟡 RESPOND</strong> — Reframe or educate in 2–3 sentences max. Don't dump the pitch.</li>
+<li><strong>🔴 PIVOT</strong> — End on a <strong>question</strong> that forces a decision or surfaces the real concern. If you don't pivot, you didn't handle it — you just talked.</li>
+</ul>
+<p><em>Example pivot questions:</em> "Does that make sense?" · "If I could handle that, would you move forward right now?" · "So money aside, you're 100% in?"</p>`
+      },
+      {
+        label:'Three Groups',
+        heading:'Classify before you respond',
+        body:`<ul>
+<li><strong>Uncertainty</strong> — anything less than 100% certainty that now is the right time. <em>These are the real objections.</em></li>
+<li><strong>Support</strong> — "need to check with someone else"</li>
+<li><strong>Financial</strong> — "I literally cannot make this work" (not "too much")</li>
+</ul>
+<p><strong>Always handle uncertainty first.</strong> Pace every objection with:</p>
+<p>"No problem. Before we get into any of that — how do you feel? You mentioned you want to <strong>[their goal]</strong>. Do you 100% feel like this is what you need to get there, and that this is 100% going to work?"</p>
+<span class="direction">Command honesty. If wishy-washy, double down.</span>`
+      },
+      {
+        label:'Tool',
+        heading:'Full objection library',
+        body:`<p>Click below (or the sidebar) to open the full ARP-tagged objection library — sleep-on-it, money, partner, and the "$0 down" rebuttal.</p>
+<button class="btn btn-gold" onclick="openModal('objections')" style="margin-top:10px">Open Objection Handler</button>`
+      }
+    ],
+    prompts:[
+      'Identified which of the 3 groups it is',
+      'Acknowledged BEFORE responding',
+      'Pivoted with a question (not a statement)',
+      'Handled uncertainty FIRST',
+      'Got a definitive answer before moving on'
+    ]
+  },
+  {
+    id:'sam_close',
+    title:'Close & Enroll',
+    meta:'Stage 09 · 3 min',
+    blocks:[
+      {
+        label:'Enrollment',
+        heading:'Process the investment',
+        highlight:true,
+        body:`<p>"Perfect — let me get you enrolled. Takes just a few minutes."</p>
+<ul>
+<li>Confirm payment method + terms chosen</li>
+<li>Process payment on the call</li>
+<li>Schedule onboarding launch call (within 48 hrs)</li>
+<li>Send welcome email + platform access</li>
+<li>Hand off to team / funding coach</li>
+</ul>`
+      },
+      {
+        label:'Post-Close',
+        heading:'Lock in the relationship',
+        body:`<p>"Congrats <span class="fill" data-field="pName">Name</span> — you made the right call. My team will be reaching out within 24 hours. In the meantime, check your inbox for the welcome email and onboarding details."</p>
+<p>"Anything come to mind before we wrap?"</p>`
+      }
+    ],
+    prompts:[
+      'Payment processed on the call',
+      'Onboarding call scheduled',
+      'Welcome email confirmed received',
+      'Client handed off cleanly'
+    ]
   }
 ];
 
