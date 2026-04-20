@@ -1907,12 +1907,21 @@ const SAM_STAGES = [
         heading:'Gauge familiarity',
         highlight:true,
         body:`<p>"Have you been following us for a long time, or are we a bit newer on your radar?"</p>
-<p><span class="direction">[Their answer sets the tone for how much context you need to give. Long-time follower → validate and move fast. New to you → take a moment to establish credibility before pitching.]</span></p>`
+<p><span class="direction">[Long-time follower → validate and move fast. New to you → drop the positioning before moving on.]</span></p>`
+      },
+      {
+        label:'Positioning',
+        heading:'Plant your flag — fast',
+        highlight:true,
+        body:`<p>"Got it, <span class="fill" data-field="pName">Name</span> — honestly, based on everything you just told me, I'm confident we can get you there."</p>
+<p>"Real quick on us — <strong>300+ business owners funded</strong>, <strong>$30k to $100k+</strong> secured in just the last 90 days, <strong>97% success rate</strong>, and we have private relationships with <strong>10+ financial partners</strong>. That's what puts us in a different position than anyone else you'll talk to."</p>
+<p>"Any questions on us — or are we good to get into it?"</p>`
       }
     ],
     prompts:[
       'Asked the awareness question — actually listened',
-      'Adjusted depth of credibility build based on their answer'
+      'Dropped all 4 proof points in one breath',
+      'Got a "we\'re good" before moving on'
     ]
   }
 ];
