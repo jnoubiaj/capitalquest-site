@@ -1876,6 +1876,14 @@ const SAM_STAGES = [
         heading:'Understand what they\'ve already tried',
         body:`<p>"Have you worked with a funding company before — or is this your first time? Have you tried applying on your own?"</p>
 <p><span class="direction">[Their answer tells you a lot. First-timers need more education. People who've been burned need trust rebuilt. People who tried DIY are already aware of the gap — lean into that.]</span></p>`
+      },
+      {
+        label:'Tie-Down',
+        heading:'Close discovery clean',
+        highlight:true,
+        body:`<p>"Cool — sounds like I have everything I need."</p>
+<p>"Anything else you feel we haven't covered yet that I'd need to know — to make sure I get you the most accurate information possible?"</p>
+<p><span class="direction">[Pause and let them speak. This is their last chance to surface anything before you pitch. Whatever they bring up here, acknowledge it and fold it into the presentation.]</span></p>`
       }
     ],
     prompts:[
@@ -1885,6 +1893,7 @@ const SAM_STAGES = [
       'Uncovered at least one pain point beyond funding',
       'Got their escape plan — revenue, balance transfer, or other',
       'Asked about past funding attempts',
+      'Got a clean "nothing else" on the tie-down',
       'Took notes to mirror back later'
     ]
   }
