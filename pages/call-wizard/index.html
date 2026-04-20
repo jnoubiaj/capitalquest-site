@@ -1781,8 +1781,8 @@ const SETTER_STAGES = [
 const SAM_STAGES = [
   {
     id:'sam_open',
-    title:'Opening',
-    meta:'Stage 01 · ~1 min',
+    title:'Intro & Frame',
+    meta:'Stage 01 · ~2 min',
     blocks:[
       {
         label:'Warm Opener',
@@ -1793,19 +1793,7 @@ const SAM_STAGES = [
 <p>"Hey <span class="fill" data-field="pName">Name</span>! <strong>[Your Name]</strong> with Capital Quest Funding — how's it going? Where are you calling in from?"</p>
 <p><span class="direction">[Let them answer — be genuinely interested]</span></p>
 <p>"Nice! Great — saw you got scheduled on my calendar from our Facebook ads form. Awesome that you took the time to reach out."</p>`
-      }
-    ],
-    prompts:[
-      'Asked where they\'re calling from — actually listened',
-      'Referenced the Facebook form to establish context',
-      'Tone is relaxed — not rushed into pitch mode'
-    ]
-  },
-  {
-    id:'sam_frame',
-    title:'Frame',
-    meta:'Stage 02 · ~1 min',
-    blocks:[
+      },
       {
         label:'Set the Frame',
         heading:'Establish control and protect your authority',
@@ -1815,12 +1803,23 @@ const SAM_STAGES = [
 <p>"We'll also cover your reason for funding and what makes you a strong fit — because I need to protect our lender relationships before I even consider making any introductions."</p>
 <p>"If I send them an applicant that doesn't meet their requirements, I'm at risk of losing those relationships — and I can't let that happen."</p>
 <p>"<strong>Sound fair?</strong>"</p>`
+      },
+      {
+        label:'If They Ask Pricing Upfront',
+        heading:'Defer price — you haven\'t earned the right yet',
+        caution:true,
+        body:`<p>"Great question — and I promise I'll get to that."</p>
+<p>"The thing is, I can't give you an honest number until I know exactly what you qualify for. Every profile is different, and the investment is tied directly to the funding range we can get you into."</p>
+<p>"What I don't want to do is throw out a number before I've actually looked at your situation — because that wouldn't be fair to you."</p>
+<p>"Give me a few minutes to go through your file with you, and I'll give you the full picture — funding range and investment together. That way it actually makes sense."</p>
+<p>"<strong>Sound good?</strong>"</p>`
       }
     ],
     prompts:[
-      'Used prospect\'s name in the frame',
-      'Explained the "why" behind the questions — lender protection',
-      'Got a "yes" or "sounds fair" before moving forward'
+      'Asked where they\'re calling from — actually listened',
+      'Referenced the Facebook form',
+      'Got a "sounds fair" on the frame before moving on',
+      'If pricing asked early — deferred cleanly without quoting'
     ]
   }
 ];
