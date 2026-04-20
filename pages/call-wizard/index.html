@@ -518,6 +518,7 @@ input,select,textarea{font-family:inherit;font-size:14px;color:inherit}
     <div class="mode-toggle">
       <button class="mode-btn active" id="modeCloser" onclick="setMode('closer')">Closer</button>
       <button class="mode-btn" id="modeSetter" onclick="setMode('setter')">Setter</button>
+      <button class="mode-btn" id="modeSam" onclick="setMode('sam')">Sam's Script</button>
     </div>
   </div>
   <div class="topbar-right">
@@ -1467,23 +1468,16 @@ function goto(i){
 function nextStage(){
   if(window.appMode==='setter'){
     setterCompleted.add(setterCurrent);
-    if(setterCurrent < SETTER_STAGES.length-1){
-      setterCurrent++;
-      renderSetterStage(setterCurrent);
-      window.scrollTo({top:0,behavior:'smooth'});
-    } else {
-      alert('Setter call complete! Prospect booked.');
-    }
+    if(setterCurrent < SETTER_STAGES.length-1){ setterCurrent++; renderSetterStage(setterCurrent); window.scrollTo({top:0,behavior:'smooth'}); }
+    else alert('Setter call complete! Prospect booked.');
+  } else if(window.appMode==='sam'){
+    samCompleted.add(samCurrent);
+    if(samCurrent < SAM_STAGES.length-1){ samCurrent++; renderSamStage(samCurrent); window.scrollTo({top:0,behavior:'smooth'}); }
+    else { downloadSummaryPDF(); openModal('summary'); }
   } else {
     completed.add(current);
-    if(current < STAGES.length-1){
-      current++;
-      renderStage(current);
-      window.scrollTo({top:0,behavior:'smooth'});
-    } else {
-      downloadSummaryPDF();
-      openModal('summary');
-    }
+    if(current < STAGES.length-1){ current++; renderStage(current); window.scrollTo({top:0,behavior:'smooth'}); }
+    else { downloadSummaryPDF(); openModal('summary'); }
   }
 }
 
@@ -1604,6 +1598,8 @@ function downloadSummaryPDF(){
 function prevStage(){
   if(window.appMode==='setter'){
     if(setterCurrent>0){ setterCurrent--; renderSetterStage(setterCurrent); window.scrollTo({top:0,behavior:'smooth'}); }
+  } else if(window.appMode==='sam'){
+    if(samCurrent>0){ samCurrent--; renderSamStage(samCurrent); window.scrollTo({top:0,behavior:'smooth'}); }
   } else {
     if(current>0){ current--; renderStage(current); window.scrollTo({top:0,behavior:'smooth'}); }
   }
@@ -1781,6 +1777,36 @@ const SETTER_STAGES = [
   }
 ];
 
+/* ========== SAM'S SCRIPT STAGES ========== */
+const SAM_STAGES = [
+  {
+    id:'sam_open',
+    title:'Opening',
+    meta:'Stage 01 · ~1 min',
+    blocks:[
+      {
+        label:'Warm Opener',
+        heading:'Build rapport fast',
+        highlight:true,
+        body:`<p>"Hey, is this <span class="fill" data-field="pName">Name</span>?"</p>
+<p><span class="direction">[They confirm]</span></p>
+<p>"Hey <span class="fill" data-field="pName">Name</span>! <strong>[Your Name]</strong> with Capital Quest Funding — how's it going? Where are you calling in from?"</p>
+<p><span class="direction">[Let them answer — be genuinely interested]</span></p>
+<p>"Nice! Great — saw you got scheduled on my calendar from our Facebook ads form. Awesome that you took the time to reach out."</p>`
+      }
+    ],
+    prompts:[
+      'Asked where they\'re calling from — actually listened',
+      'Referenced the Facebook form to establish context',
+      'Tone is relaxed — not rushed into pitch mode'
+    ]
+  }
+];
+
+let samCurrent = 0;
+const samCompleted = new Set();
+const samNotes = {};
+
 const SETTER_OBJECTIONS = {
   s_number:{
     title:'"I don\'t remember filling anything out"',
@@ -1848,19 +1874,79 @@ function setMode(mode){
   window.appMode = mode;
   document.getElementById('modeCloser').classList.toggle('active', mode==='closer');
   document.getElementById('modeSetter').classList.toggle('active', mode==='setter');
-  document.querySelector('.nav-label').textContent = mode==='setter' ? 'Setter Flow' : 'Call Flow';
+  document.getElementById('modeSam').classList.toggle('active', mode==='sam');
+  const navLabel = document.querySelector('.nav-label');
   if(mode==='setter'){
+    navLabel.textContent = 'Setter Flow';
     setterCurrent = 0;
     renderSetterNav();
     renderSetterStage(0);
     renderSetterPanel();
     document.querySelector('.info-strip').style.display = 'none';
+  } else if(mode==='sam'){
+    navLabel.textContent = "Sam's Script";
+    samCurrent = 0;
+    renderSamNav();
+    renderSamStage(0);
+    renderCloserPanel();
+    document.querySelector('.info-strip').style.display = '';
   } else {
+    navLabel.textContent = 'Call Flow';
     renderNav();
     renderStage(current);
     renderCloserPanel();
     document.querySelector('.info-strip').style.display = '';
   }
+}
+
+function renderSamNav(){
+  const list = document.getElementById('navList');
+  list.innerHTML = SAM_STAGES.map((s,i)=>`
+    <li class="nav-item ${i===samCurrent?'active':''} ${samCompleted.has(i)?'done':''}" onclick="gotoSam(${i})">
+      <span class="idx">0${i+1}</span>
+      <span>${s.title}</span>
+      <span class="check">${samCompleted.has(i)?'✓':''}</span>
+    </li>
+  `).join('');
+}
+
+function renderSamStage(i){
+  const s = SAM_STAGES[i];
+  document.getElementById('stageTitle').innerHTML = s.title;
+  document.getElementById('stageMeta').textContent = s.meta;
+  let html = '';
+  s.blocks.forEach(b=>{
+    const cls = b.caution?'script-block caution':(b.highlight?'script-block highlight':'script-block');
+    html += `<div class="${cls}">
+      <div class="script-block-head"><span class="script-label">${b.label}</span></div>
+      <h2 class="script-heading">${b.heading}</h2>
+      <div class="script-body">${fillTokens(b.body)}</div>
+    </div>`;
+  });
+  if(s.prompts && s.prompts.length){
+    html += `<div class="script-block"><div class="script-block-head"><span class="script-label">Checklist</span></div><div class="prompts">`;
+    s.prompts.forEach((p,pi)=>{
+      const key = `sam-${s.id}-${pi}`;
+      const checked = promptChecks[key]?'checked':'';
+      html += `<div class="prompt ${checked}" onclick="togglePrompt('${key}')"><div class="prompt-check">✓</div><div class="prompt-text">${p}</div></div>`;
+    });
+    html += `</div></div>`;
+  }
+  html += `<div class="notes-block">
+    <label>Notes — ${s.title}</label>
+    <textarea oninput="samNotes['${s.id}']=this.value" placeholder="Quotes, reactions, red flags…">${samNotes[s.id]||''}</textarea>
+  </div>`;
+  document.getElementById('stageContent').innerHTML = html;
+  document.getElementById('btnPrev').disabled = i===0;
+  document.getElementById('btnPrev').style.opacity = i===0?'.4':'1';
+  document.getElementById('btnNext').textContent = i===SAM_STAGES.length-1?'Finish Call ✓':'Next Stage →';
+  renderSamNav();
+}
+
+function gotoSam(i){
+  samCurrent = i;
+  renderSamStage(i);
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 
 function renderSetterNav(){
