@@ -60,6 +60,9 @@ input,select,textarea{font-family:inherit;font-size:14px;color:inherit}
   color:var(--gray-logo);text-transform:uppercase;
 }
 .topbar-right{display:flex;align-items:center;gap:24px}
+.mode-toggle{display:flex;align-items:center;background:#111;border:1px solid #2A2A2A;border-radius:20px;padding:3px;gap:2px}
+.mode-btn{font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:5px 14px;border-radius:16px;border:none;cursor:pointer;transition:background .2s,color .2s;background:transparent;color:var(--muted)}
+.mode-btn.active{background:var(--brand);color:#000;font-weight:600}
 .timer{
   font-family:'Geist Mono',monospace;font-size:13px;
   color:var(--brand);
@@ -511,6 +514,11 @@ input,select,textarea{font-family:inherit;font-size:14px;color:inherit}
     <img class="logo" src="../../Brand_assets/CapitalQuest Consulting-R-02.png" alt="CapitalQuest Consulting">
     <span class="divider"></span>
     <span class="tool">Call Wizard · v1.0</span>
+    <span class="divider"></span>
+    <div class="mode-toggle">
+      <button class="mode-btn active" id="modeCloser" onclick="setMode('closer')">Closer</button>
+      <button class="mode-btn" id="modeSetter" onclick="setMode('setter')">Setter</button>
+    </div>
   </div>
   <div class="topbar-right">
     <div class="timer" id="timer">00:00:00</div>
@@ -526,7 +534,6 @@ input,select,textarea{font-family:inherit;font-size:14px;color:inherit}
     <ul class="nav-list" id="navList"></ul>
 
     <div class="nav-utility">
-      <button class="util-btn" onclick="openModal('setter')" style="border-color:var(--brand);color:var(--brand)">📞 Setter Script</button>
       <button class="util-btn" onclick="openModal('objections')">⚠ Objection Handler</button>
       <button class="util-btn" onclick="openModal('summary')">⌂ Call Summary</button>
       <button class="util-btn danger" onclick="resetCall()">↻ Reset Call</button>
@@ -650,6 +657,15 @@ input,select,textarea{font-family:inherit;font-size:14px;color:inherit}
     </div>
 
   </aside>
+</div>
+
+<!-- ============== SETTER VIEW ============== -->
+<div id="setterView" style="display:none;max-width:860px;margin:0 auto;padding:32px 24px;display:none">
+  <div style="margin-bottom:28px">
+    <h2 style="font-size:22px;font-weight:600;color:var(--ink);letter-spacing:-.02em">Setter Script</h2>
+    <p style="color:var(--muted);font-size:13px;margin-top:4px">Use this flow to qualify prospects and book them onto a closer call.</p>
+  </div>
+  <div id="setterContent"></div>
 </div>
 
 <!-- ============== MODAL ============== -->
@@ -1594,6 +1610,21 @@ function openModal(kind, category){
     body.innerHTML = renderSetterScript();
   }
   back.classList.add('open');
+}
+
+function setMode(mode){
+  const layout = document.querySelector('.layout');
+  const setterView = document.getElementById('setterView');
+  document.getElementById('modeCloser').classList.toggle('active', mode==='closer');
+  document.getElementById('modeSetter').classList.toggle('active', mode==='setter');
+  if(mode==='setter'){
+    layout.style.display = 'none';
+    setterView.style.display = 'block';
+    document.getElementById('setterContent').innerHTML = renderSetterScript();
+  } else {
+    layout.style.display = '';
+    setterView.style.display = 'none';
+  }
 }
 
 function renderSetterScript(){
