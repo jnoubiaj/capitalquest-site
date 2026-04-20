@@ -1846,12 +1846,17 @@ function renderSetterPanel(){
     </div>
   </div>
   <div class="tool-section">
-    <div class="tool-head">Quick Objections</div>
+    <div class="tool-head">Objection Handles</div>
     <button class="obj-cat" onclick="openSetterObj('s_number')"><span class="obj-num">01</span> "I don't remember the form"</button>
     <button class="obj-cat" onclick="openSetterObj('s_notinterested')" style="border-color:var(--danger);color:var(--danger)"><span class="obj-num">!</span> "Not interested"</button>
     <button class="obj-cat" onclick="openSetterObj('s_loan')"><span class="obj-num">02</span> "Is this a loan?"</button>
     <button class="obj-cat" onclick="openSetterObj('s_sendinfo')"><span class="obj-num">03</span> "Send info first"</button>
     <button class="obj-cat" onclick="openSetterObj('s_notime')"><span class="obj-num">04</span> "No time right now"</button>
+  </div>
+  <div class="tool-section" id="setterObjExpanded" style="display:none">
+    <div class="tool-head" id="setterObjTitle"></div>
+    <div id="setterObjBody" style="font-size:13px;line-height:1.7;color:var(--ink-soft);padding-top:8px"></div>
+    <button class="util-btn" onclick="document.getElementById('setterObjExpanded').style.display='none'" style="margin-top:10px">✕ Close</button>
   </div>
   <div class="tool-section">
     <div class="tool-head">Prospect Info</div>
@@ -1906,17 +1911,20 @@ function renderCloserPanel(){
 function openSetterObj(key){
   const o = SETTER_OBJECTIONS[key];
   if(!o) return;
-  const title = document.getElementById('modalTitle');
-  const body = document.getElementById('modalBody');
-  title.textContent = o.title;
+  const panel = document.getElementById('setterObjExpanded');
+  const titleEl = document.getElementById('setterObjTitle');
+  const bodyEl = document.getElementById('setterObjBody');
+  if(!panel){ return; }
+  titleEl.textContent = o.title;
   let html = '';
   o.groups.forEach(g=>{
     g.items.forEach(it=>{
-      html += `<div class="obj-item"><div class="obj-item-q">${it.q}</div><div class="obj-item-a">${it.a}</div></div>`;
+      html += `<div style="margin-bottom:10px"><div style="font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:4px">${it.q}</div><div>${it.a}</div></div>`;
     });
   });
-  body.innerHTML = html;
-  document.getElementById('modalBack').classList.add('open');
+  bodyEl.innerHTML = html;
+  panel.style.display = 'block';
+  panel.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 
 function gotoSetter(i){
