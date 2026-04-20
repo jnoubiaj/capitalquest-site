@@ -1823,6 +1823,38 @@ const SAM_STAGES = [
     ]
   },
   {
+    id:'sam_convo',
+    title:'Discovery',
+    meta:'Stage 03 · ~3 min',
+    blocks:[
+      {
+        label:'Business Discovery',
+        heading:'Let them talk — listen for pain',
+        highlight:true,
+        body:`<p>"Alright, cool — so tell me a little bit about your business. What do you do, and how long have you been in business for?"</p>
+<p><span class="direction">[Let them answer fully — don't interrupt. Take notes.]</span></p>`
+      },
+      {
+        label:'Capital Discovery',
+        heading:'Uncover the real funding motivation',
+        body:`<p>"Got it — and what are the capital-related challenges you're facing right now? Are you looking to start or scale your business?"</p>
+<p><span class="direction">[Listen for specific goals — inventory, marketing, hiring, real estate, etc. The more specific, the stronger your pitch later.]</span></p>`
+      },
+      {
+        label:'Dig Deeper',
+        heading:'Find pain beyond funding',
+        body:`<p>"Gotcha — and are there any other challenges you're facing in your business right now, besides acquiring funding?"</p>
+<p><span class="direction">[This opens the door to deeper pain points. What they say here is what you mirror back when you present the solution.]</span></p>`
+      }
+    ],
+    prompts:[
+      'Asked about business — let them fully answer',
+      'Identified whether they\'re starting or scaling',
+      'Uncovered at least one pain point beyond funding',
+      'Took notes to mirror back later'
+    ]
+  },
+  {
     id:'sam_review',
     title:'Review the Application',
     meta:'Stage 02 · ~2 min',
