@@ -1823,6 +1823,32 @@ const SAM_STAGES = [
     ]
   },
   {
+    id:'sam_review',
+    title:'Review the Application',
+    meta:'Stage 02 · ~2 min',
+    blocks:[
+      {
+        label:'Review What You Know',
+        heading:'Show you\'ve done your homework',
+        highlight:true,
+        body:`<p>"Cool — I took a minute to look at the application you submitted with us. Looks like you have…"</p>
+<ul>
+  <li>Credit score around <strong><span class="fill" data-field="pScore">[credit score]</span></strong></li>
+  <li>Utilization around <strong><span class="fill" data-field="pUtil">[utilization]</span>%</strong></li>
+  <li>Total personal CC limits: <strong><span class="fill" data-field="pLimit">[total limits]</span></strong></li>
+  <li>Funding target: <strong><span class="fill" data-field="pTarget">[funding target]</span></strong></li>
+  <li>Business: <strong><span class="fill" data-field="pBiz">[business type]</span></strong></li>
+</ul>
+<p>"Before we dive in — does everything sound accurate?"</p>`
+      }
+    ],
+    prompts:[
+      'Had prospect info filled in before the call',
+      'Read it back naturally — didn\'t just recite it',
+      'Got confirmation everything is accurate before moving on'
+    ]
+  },
+  {
     id:'sam_convo',
     title:'Discovery',
     meta:'Stage 03 · ~3 min',
@@ -1852,32 +1878,6 @@ const SAM_STAGES = [
       'Identified whether they\'re starting or scaling',
       'Uncovered at least one pain point beyond funding',
       'Took notes to mirror back later'
-    ]
-  },
-  {
-    id:'sam_review',
-    title:'Review the Application',
-    meta:'Stage 02 · ~2 min',
-    blocks:[
-      {
-        label:'Review What You Know',
-        heading:'Show you\'ve done your homework',
-        highlight:true,
-        body:`<p>"Cool — I took a minute to look at the application you submitted with us. Looks like you have…"</p>
-<ul>
-  <li>Credit score around <strong><span class="fill" data-field="pScore">[credit score]</span></strong></li>
-  <li>Utilization around <strong><span class="fill" data-field="pUtil">[utilization]</span>%</strong></li>
-  <li>Total personal CC limits: <strong><span class="fill" data-field="pLimit">[total limits]</span></strong></li>
-  <li>Funding target: <strong><span class="fill" data-field="pTarget">[funding target]</span></strong></li>
-  <li>Business: <strong><span class="fill" data-field="pBiz">[business type]</span></strong></li>
-</ul>
-<p>"Before we dive in — does everything sound accurate?"</p>`
-      }
-    ],
-    prompts:[
-      'Had prospect info filled in before the call',
-      'Read it back naturally — didn\'t just recite it',
-      'Got confirmation everything is accurate before moving on'
     ]
   }
 ];
