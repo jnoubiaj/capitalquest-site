@@ -1454,7 +1454,8 @@ function renderStage(i){
 
 function togglePrompt(key){
   promptChecks[key] = !promptChecks[key];
-  renderStage(current);
+  if(window.appMode==='setter') renderSetterStage(setterCurrent);
+  else renderStage(current);
 }
 
 function goto(i){
