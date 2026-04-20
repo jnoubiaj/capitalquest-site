@@ -1799,6 +1799,13 @@ const SETTER_OBJECTIONS = {
       q:'Response',
       a:'"That\'s great — means you\'re serious about this. Here\'s a thought though: when you go grocery shopping, you don\'t just walk into the first store and buy everything there. You look for the best products, best prices, best deals — because it\'s your money. This is your biggest investment. Doesn\'t it deserve the same approach? All I\'m asking is for you to hop on a quick call with our advisor. If what you have is genuinely better, he\'ll tell you that himself. Worth a look?"'
     }]}]
+  },
+  s_price:{
+    title:'"How much does it cost?"',
+    groups:[{title:'',items:[{
+      q:'Response',
+      a:'"Great question — and I want to make sure you get a real answer, not a generic one. The investment depends on the funding range you qualify for, and that\'s something our advisor figures out with you on the call after looking at your profile. What I can tell you is we\'ve helped 300+ business owners get $35k to $100k+ — and the cost is structured so it makes sense relative to what you\'re getting.<br><br>The call is the only place where we can give you the exact number alongside the exact funding range. Honestly, that\'s where it\'ll all make sense. Can we lock in a time?"'
+    }]}]
   }
 };
 
@@ -1887,6 +1894,7 @@ function renderSetterPanel(){
     <button class="obj-cat" onclick="openSetterObj('s_sendinfo')"><span class="obj-num">03</span> "Send info first"</button>
     <button class="obj-cat" onclick="openSetterObj('s_notime')"><span class="obj-num">04</span> "No time right now"</button>
     <button class="obj-cat" onclick="openSetterObj('s_competitor')"><span class="obj-num">05</span> "Already working with someone"</button>
+    <button class="obj-cat" onclick="openSetterObj('s_price')" style="border-color:var(--danger);color:var(--danger)"><span class="obj-num">!</span> "How much does it cost?"</button>
   </div>
   <div class="tool-section" id="setterObjExpanded" style="display:none">
     <div class="tool-head" id="setterObjTitle"></div>
