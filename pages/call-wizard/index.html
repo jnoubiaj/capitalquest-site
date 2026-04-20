@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Capital Quest — Call Wizard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400..600&display=swap" rel="stylesheet">
@@ -633,6 +634,7 @@ input,select,textarea{font-family:inherit;font-size:14px;color:inherit}
       <button class="obj-cat" onclick="openModal('objections','support')"><span class="obj-num">02</span> Need to check w/ someone</button>
       <button class="obj-cat" onclick="openModal('objections','financial')"><span class="obj-num">03</span> Financial concern</button>
       <button class="obj-cat" onclick="openModal('objections','upfront')"><span class="obj-num">04</span> "Why pay upfront?"</button>
+      <button class="obj-cat" onclick="openModal('objections','why35k')"><span class="obj-num">05</span> "Why only $35k?"</button>
     </div>
 
     <div class="tool-section">
@@ -1201,6 +1203,32 @@ const OBJECTIONS = {
         ]
       }
     ]
+  },
+  why35k:{
+    title:'"Why only $35k?" — Ceiling Question',
+    groups:[
+      {
+        title:'Reframe the Floor · ARP',
+        items:[
+          {
+            q:'What $35k actually means',
+            a:'$35k is the <strong>tracked floor</strong> — the baseline we\'ve confirmed across qualifying profiles over the past few years. It\'s the number we can say with near-certainty. Most clients land well above it. The 97% is conservative by design — it\'s not a ceiling, it\'s a guarantee.'
+          },
+          {
+            q:'Prospect: "Why isn\'t it higher — like $100k?"',
+            a:'<strong>🟢 Acknowledge:</strong> "That\'s a fair question — and honestly, I\'d rather you ask that than not."<br><br><strong>🟡 Respond:</strong> "The $35k is the floor we track because it holds across a wide range of profiles. Most of our clients land well above that. Based on what we\'re seeing with your profile, you\'re actually on track for <strong>[their tier range]</strong> — so that number is specific to you."<br><br><strong>🔴 Pivot:</strong> "Does [their tier range] feel like it moves the needle for what you\'re trying to accomplish?"'
+          },
+          {
+            q:'Prospect: "I need at least $100k–$150k"',
+            a:'<strong>🟢 Acknowledge:</strong> "Totally hear that — you\'re thinking bigger, which is exactly the right mindset."<br><br><strong>🟡 Respond:</strong> "Here\'s what most people don\'t realize: round one isn\'t the ceiling — it\'s the foundation. Clients who play it right come back for round two with higher limits, stronger lender relationships, and stack it. We\'ve had clients go from $50k to $200k+ across rounds."<br><br><strong>🔴 Pivot:</strong> "Would getting [their tier range] in the next 2–6 weeks be enough to get you moving — while we position you for a bigger round two?"'
+          },
+          {
+            q:'The stat itself — if they question the 97%',
+            a:'<strong>🟢 Acknowledge:</strong> "Yeah — it sounds almost too good, I get it."<br><br><strong>🟡 Respond:</strong> "The reason that number holds is because we don\'t take everyone. We pre-qualify before we ever pitch. If the profile doesn\'t meet the threshold, we tell you upfront. We\'re not in the business of setting people up to fail — that\'s a bad look for everyone."<br><br><strong>🔴 Pivot:</strong> "Based on your numbers today, you\'re in the zone — so you\'d be one of the 97%, not the 3%. Does that give you more confidence moving forward?"'
+          }
+        ]
+      }
+    ]
   }
 };
 
@@ -1356,8 +1384,123 @@ function nextStage(){
     renderStage(current);
     window.scrollTo({top:0,behavior:'smooth'});
   } else {
+    downloadSummaryPDF();
     openModal('summary');
   }
+}
+
+function downloadSummaryPDF(){
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({unit:'pt',format:'letter'});
+  const name = document.getElementById('pName').value || 'Prospect';
+  const loc = document.getElementById('pLoc').value || '—';
+  const setter = document.getElementById('pSetter').value || '—';
+  const biz = document.getElementById('pBiz').value || '—';
+  const score = document.getElementById('pScore').value || '—';
+  const util = document.getElementById('pUtil').value || '—';
+  const age = document.getElementById('pAge').value || '—';
+  const limit = parseFloat(document.getElementById('pLimit').value) || 0;
+  const banks = document.getElementById('pBanks').value || '—';
+  const target = document.getElementById('pTarget').value || '—';
+  const fmt = n => '$' + Math.round(n).toLocaleString();
+  const tier = window.currentTier ? `${window.currentTier.name} · ${window.currentTier.range}` : '—';
+  const potential = limit ? `${fmt(limit*2)} – ${fmt(limit*2.5)}` : '—';
+  const duration = document.getElementById('timer').textContent;
+
+  const W = doc.internal.pageSize.getWidth();
+  let y = 48;
+
+  // header bar
+  doc.setFillColor(11,20,22);
+  doc.rect(0,0,W,38,'F');
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(13);
+  doc.setTextColor(212,175,55);
+  doc.text('CAPITAL QUEST',36,24);
+  doc.setFont('helvetica','normal');
+  doc.setFontSize(10);
+  doc.setTextColor(199,209,213);
+  doc.text('Call Summary',36,35);
+  doc.setTextColor(120,138,144);
+  doc.text(`Duration: ${duration}`,W-36,24,{align:'right'});
+  doc.text(new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}),W-36,35,{align:'right'});
+
+  y = 70;
+
+  // section: prospect info
+  const drawSection = (label) => {
+    doc.setFillColor(23,37,42);
+    doc.rect(36,y-13,W-72,18,'F');
+    doc.setFont('helvetica','bold');
+    doc.setFontSize(8);
+    doc.setTextColor(212,175,55);
+    doc.text(label.toUpperCase(),44,y-1);
+    y += 16;
+  };
+
+  const drawRow = (label, value) => {
+    doc.setFont('helvetica','bold');
+    doc.setFontSize(9);
+    doc.setTextColor(120,138,144);
+    doc.text(label,44,y);
+    doc.setFont('helvetica','normal');
+    doc.setTextColor(30,30,30);
+    doc.text(String(value),200,y);
+    y += 16;
+  };
+
+  drawSection('Prospect Info');
+  drawRow('Name', name);
+  drawRow('Location', loc);
+  drawRow('Setter / Source', setter);
+  drawRow('Business', biz);
+  y += 6;
+
+  drawSection('Credit Profile');
+  drawRow('Credit Score', score);
+  drawRow('Utilization', util !== '—' ? `${util}%` : '—');
+  drawRow('Credit Age', age !== '—' ? `${age} yrs` : '—');
+  drawRow('Bank Relationships', banks);
+  drawRow('Total CC Limits', limit ? fmt(limit) : '—');
+  y += 6;
+
+  drawSection('Funding Assessment');
+  drawRow('Funding Target', target);
+  drawRow('Funding Potential (2x–2.5x)', potential);
+  drawRow('Tier Placement', tier);
+  y += 6;
+
+  // notes
+  const stageNotes = STAGES.filter(s => notes[s.id] && notes[s.id].trim());
+  if(stageNotes.length){
+    drawSection('Notes by Stage');
+    stageNotes.forEach(s=>{
+      doc.setFont('helvetica','bold');
+      doc.setFontSize(8);
+      doc.setTextColor(120,138,144);
+      doc.text(s.title.replace(/<\/?em>/g,'').toUpperCase(),44,y);
+      y += 13;
+      doc.setFont('helvetica','normal');
+      doc.setFontSize(9);
+      doc.setTextColor(30,30,30);
+      const lines = doc.splitTextToSize(notes[s.id],W-120);
+      lines.forEach(l=>{ doc.text(l,44,y); y+=13; });
+      y += 4;
+      if(y > doc.internal.pageSize.getHeight()-60){ doc.addPage(); y=48; }
+    });
+  }
+
+  // footer
+  const pageH = doc.internal.pageSize.getHeight();
+  doc.setFillColor(11,20,22);
+  doc.rect(0,pageH-28,W,28,'F');
+  doc.setFont('helvetica','normal');
+  doc.setFontSize(8);
+  doc.setTextColor(120,138,144);
+  doc.text('Capital Quest Consulting · Confidential',36,pageH-10);
+  doc.text(`Generated ${new Date().toLocaleString()}`,W-36,pageH-10,{align:'right'});
+
+  doc.save(`CQ-Summary-${name.replace(/\s+/g,'-')}-${Date.now()}.pdf`);
 }
 
 function prevStage(){
