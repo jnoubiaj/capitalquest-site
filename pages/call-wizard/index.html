@@ -511,7 +511,7 @@ input,select,textarea{font-family:inherit;font-size:14px;color:inherit}
 
 <header class="topbar">
   <div class="brand">
-    <img class="logo" src="../../Brand_assets/CapitalQuest Consulting-R-02.png" alt="CapitalQuest Consulting">
+    <img class="logo" src="../../Brand_assets/capitalquest-funding-logo.svg" alt="CapitalQuest Funding">
     <span class="divider"></span>
     <span class="tool">Call Wizard · v1.0</span>
     <span class="divider"></span>
@@ -1590,7 +1590,7 @@ function downloadSummaryPDF(){
   doc.setFont('helvetica','normal');
   doc.setFontSize(8);
   doc.setTextColor(120,138,144);
-  doc.text('Capital Quest Consulting · Confidential',36,pageH-10);
+  doc.text('Capital Quest Funding · Confidential',36,pageH-10);
   doc.text(`Generated ${new Date().toLocaleString()}`,W-36,pageH-10,{align:'right'});
 
   doc.save(`CQ-Summary-${name.replace(/\s+/g,'-')}-${Date.now()}.pdf`);
