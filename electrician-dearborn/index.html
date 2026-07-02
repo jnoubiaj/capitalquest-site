@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rouge Valley Electric — Licensed Electrician in Dearborn, MI</title>
+  <meta name="description" content="Rouge Valley Electric is a licensed & insured electrician serving Dearborn and Wayne County. Panel upgrades, EV chargers, rewiring, repairs & 24/7 emergency service." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['Fraunces', 'serif'],
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            ink:    { DEFAULT: '#10151f', 800: '#161d2b', 700: '#1d2638', 600: '#27324a' },
+            amber:  { DEFAULT: '#f6a623', 400: '#f8b94f', 500: '#f6a623', 600: '#e08c0a', 700: '#b56f08' },
+            copper: '#c2632a',
+            cloud:  '#f5f3ee',
+            slatey: '#5b6678',
+          },
+          boxShadow: {
+            soft:    '0 1px 2px rgba(16,21,31,.04), 0 8px 24px -8px rgba(16,21,31,.12)',
+            lift:    '0 2px 4px rgba(16,21,31,.06), 0 20px 40px -16px rgba(16,21,31,.22)',
+            glow:    '0 10px 30px -10px rgba(246,166,35,.55)',
+            inset:   'inset 0 1px 0 rgba(255,255,255,.06)',
+          },
+          transitionTimingFunction: {
+            spring: 'cubic-bezier(.16,1,.3,1)',
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+    body { -webkit-font-smoothing: antialiased; }
+    .h-tight { letter-spacing: -0.03em; }
+    .body-lh { line-height: 1.7; }
+    /* layered radial gradient field */
+    .field {
+      background-color: #10151f;
+      background-image:
+        radial-gradient(60% 50% at 80% 0%, rgba(246,166,35,.16) 0%, rgba(246,166,35,0) 60%),
+        radial-gradient(50% 60% at 0% 30%, rgba(194,99,42,.14) 0%, rgba(194,99,42,0) 55%),
+        radial-gradient(80% 80% at 50% 120%, rgba(39,50,74,.7) 0%, rgba(16,21,31,0) 60%);
+    }
+    /* SVG grain overlay for depth */
+    .grain::before {
+      content: "";
+      position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+      opacity: .045; pointer-events: none; mix-blend-mode: overlay;
+    }
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1); }
+    .reveal.in { opacity: 1; transform: none; }
+    a, button { outline: none; }
+    .focusring:focus-visible { box-shadow: 0 0 0 3px rgba(16,21,31,.15), 0 0 0 6px rgba(246,166,35,.55); border-radius: 12px; }
+
+    /* ===== ELECTRIC STORM LAYER ===== */
+    /* Fixed full-page overlay. mix-blend:screen means it only lights up the
+       dark sections (hero, why-us, quote, footer) and stays invisible over
+       the light cream sections — so nothing gets washed out. */
+    .storm {
+      position: fixed; inset: 0; z-index: 40;
+      pointer-events: none; overflow: hidden;
+      mix-blend-mode: screen;
+    }
+    .storm svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .bolt {
+      fill: none; opacity: 0;
+      filter: drop-shadow(0 0 6px rgba(246,166,35,.9)) drop-shadow(0 0 14px rgba(246,166,35,.5));
+    }
+    .bolt .glow { stroke: #f6a623; stroke-width: 4.5; stroke-linecap: round; stroke-linejoin: round; }
+    .bolt .core { stroke: #fff8e6; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+    .bolt-1 { animation: zap 7.5s steps(1) infinite; animation-delay: 1.2s; }
+    .bolt-2 { animation: zap 9.3s steps(1) infinite; animation-delay: 4.6s; }
+    .bolt-3 { animation: zap 11.1s steps(1) infinite; animation-delay: 2.9s; }
+    .bolt-4 { animation: zap 13.4s steps(1) infinite; animation-delay: 7.8s; }
+
+    /* a single quick double-strike, then long darkness — like real lightning */
+    @keyframes zap {
+      0%, 100% { opacity: 0; }
+      1.0%  { opacity: 1; }
+      2.2%  { opacity: 0.15; }
+      3.0%  { opacity: 0.95; }
+      4.4%  { opacity: 0; }
+    }
+
+    /* full-page thunder flash — soft amber, screen-blended so only the dark
+       areas briefly brighten as the bolt strikes */
+    .thunder {
+      position: absolute; inset: 0;
+      background: radial-gradient(60% 50% at 70% 15%, rgba(246,166,35,.9) 0%, rgba(246,166,35,0) 60%),
+                  radial-gradient(50% 40% at 25% 10%, rgba(255,255,255,.7) 0%, rgba(255,255,255,0) 55%);
+      opacity: 0;
+      animation: thunderFlash 7.5s steps(1) infinite;
+      animation-delay: 1.2s;
+    }
+    @keyframes thunderFlash {
+      0%, 100% { opacity: 0; }
+      1.0%  { opacity: .55; }
+      2.4%  { opacity: .08; }
+      3.0%  { opacity: .42; }
+      4.6%  { opacity: 0; }
+    }
+
+    @media (prefers-reduced-motion: reduce) { .storm { display: none; } }
+  </style>
+</head>
+<body class="bg-cloud text-ink font-sans antialiased">
+
+  <!-- ============ ELECTRIC STORM (lightning + thunder flashes) ============ -->
+  <div class="storm" aria-hidden="true">
+    <div class="thunder"></div>
+    <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice">
+      <g class="bolt bolt-1">
+        <path class="glow" d="M250 -30 L225 120 L275 150 L210 320 L262 352 L190 600"/>
+        <path class="glow" d="M275 150 L335 232"/>
+        <path class="core" d="M250 -30 L225 120 L275 150 L210 320 L262 352 L190 600"/>
+        <path class="core" d="M275 150 L335 232"/>
+      </g>
+      <g class="bolt bolt-2">
+        <path class="glow" d="M720 -30 L690 150 L748 184 L672 372 L736 404 L655 680"/>
+        <path class="glow" d="M748 184 L808 262"/>
+        <path class="core" d="M720 -30 L690 150 L748 184 L672 372 L736 404 L655 680"/>
+        <path class="core" d="M748 184 L808 262"/>
+      </g>
+      <g class="bolt bolt-3">
+        <path class="glow" d="M1130 -30 L1102 168 L1158 202 L1086 408 L1146 440 L1066 700"/>
+        <path class="glow" d="M1102 168 L1044 246"/>
+        <path class="core" d="M1130 -30 L1102 168 L1158 202 L1086 408 L1146 440 L1066 700"/>
+        <path class="core" d="M1102 168 L1044 246"/>
+      </g>
+      <g class="bolt bolt-4">
+        <path class="glow" d="M480 -30 L455 112 L506 142 L440 300 L498 332 L420 540"/>
+        <path class="core" d="M480 -30 L455 112 L506 142 L440 300 L498 332 L420 540"/>
+      </g>
+    </svg>
+  </div>
+
+  <!-- ============ NAV ============ -->
+  <header class="sticky top-0 z-50">
+    <div class="backdrop-blur-md bg-cloud/80 border-b border-ink/5">
+      <nav class="mx-auto max-w-7xl px-6 h-[72px] flex items-center justify-between">
+        <a href="#top" class="focusring flex items-center gap-3 group">
+          <span class="relative grid place-items-center h-10 w-10 rounded-xl bg-ink text-amber shadow-lift transition-transform duration-300 ease-spring group-hover:-translate-y-0.5">
+            <svg viewBox="0 0 24 24" class="h-5 w-5" fill="currentColor"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"/></svg>
+          </span>
+          <span class="leading-tight">
+            <span class="block font-display font-600 text-[17px] h-tight">Rouge Valley Electric</span>
+            <span class="block text-[11px] uppercase tracking-[0.18em] text-slatey">Dearborn · Michigan</span>
+          </span>
+        </a>
+        <div class="hidden lg:flex items-center gap-8 text-[15px] font-500 text-ink/70">
+          <a href="#services" class="focusring hover:text-ink transition-colors duration-200">Services</a>
+          <a href="#why" class="focusring hover:text-ink transition-colors duration-200">Why Us</a>
+          <a href="#process" class="focusring hover:text-ink transition-colors duration-200">Process</a>
+          <a href="#area" class="focusring hover:text-ink transition-colors duration-200">Service Area</a>
+          <a href="#reviews" class="focusring hover:text-ink transition-colors duration-200">Reviews</a>
+        </div>
+        <div class="flex items-center gap-3">
+          <a href="tel:+13135550148" class="focusring hidden sm:flex items-center gap-2 text-[15px] font-600 text-ink hover:text-amber-700 transition-colors duration-200">
+            <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>
+            (313) 555-0148
+          </a>
+          <a href="#quote" class="focusring inline-flex items-center gap-2 rounded-xl bg-ink px-4 py-2.5 text-[14px] font-600 text-cloud shadow-lift transition-all duration-300 ease-spring hover:-translate-y-0.5 hover:bg-ink-700 active:translate-y-0">
+            Free Quote
+          </a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ============ HERO ============ -->
+  <section id="top" class="relative field grain overflow-hidden">
+    <div class="relative mx-auto max-w-7xl px-6 pt-20 pb-24 lg:pt-28 lg:pb-32 grid lg:grid-cols-12 gap-12 items-center">
+      <div class="lg:col-span-6 text-cloud">
+        <span class="reveal inline-flex items-center gap-2 rounded-full border border-amber/30 bg-amber/10 px-4 py-1.5 text-[13px] font-500 text-amber-400">
+          <span class="h-1.5 w-1.5 rounded-full bg-amber animate-pulse"></span>
+          Licensed · Insured · 24/7 Emergency Service
+        </span>
+        <h1 class="reveal mt-6 font-display font-600 h-tight text-[44px] sm:text-[58px] leading-[1.02]">
+          Dearborn's trusted<br>electrician, on call<br><span class="text-amber italic">when you need us.</span>
+        </h1>
+        <p class="reveal mt-6 max-w-xl text-[17px] text-cloud/70 body-lh">
+          From flickering lights to full panel upgrades and EV charger installs — Rouge Valley Electric delivers code-perfect work, upfront pricing, and same-day response across Dearborn and Wayne County.
+        </p>
+        <div class="reveal mt-9 flex flex-wrap items-center gap-4">
+          <a href="#quote" class="focusring group inline-flex items-center gap-2 rounded-2xl bg-amber px-6 py-4 text-[16px] font-600 text-ink shadow-glow transition-all duration-300 ease-spring hover:-translate-y-0.5 active:translate-y-0">
+            Get a Free Estimate
+            <svg viewBox="0 0 24 24" class="h-5 w-5 transition-transform duration-300 ease-spring group-hover:translate-x-1" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a href="tel:+13135550148" class="focusring inline-flex items-center gap-2 rounded-2xl border border-cloud/20 bg-cloud/5 px-6 py-4 text-[16px] font-600 text-cloud backdrop-blur transition-all duration-300 ease-spring hover:bg-cloud/10 hover:-translate-y-0.5">
+            Call (313) 555-0148
+          </a>
+        </div>
+        <div class="reveal mt-10 flex items-center gap-6 text-cloud/70">
+          <div class="flex -space-x-2.5">
+            <img class="h-9 w-9 rounded-full ring-2 ring-ink object-cover" src="images/customer-1.jpg" data-upload="72x72" alt="">
+            <img class="h-9 w-9 rounded-full ring-2 ring-ink object-cover" src="images/customer-2.jpg" data-upload="72x72" alt="">
+            <img class="h-9 w-9 rounded-full ring-2 ring-ink object-cover" src="images/customer-3.jpg" data-upload="72x72" alt="">
+          </div>
+          <div class="text-[14px]">
+            <div class="flex items-center gap-1 text-amber">
+              <svg viewBox="0 0 24 24" class="h-4 w-4" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z"/></svg>
+              <svg viewBox="0 0 24 24" class="h-4 w-4" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z"/></svg>
+              <svg viewBox="0 0 24 24" class="h-4 w-4" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z"/></svg>
+              <svg viewBox="0 0 24 24" class="h-4 w-4" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z"/></svg>
+              <svg viewBox="0 0 24 24" class="h-4 w-4" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z"/></svg>
+            </div>
+            <span class="font-500 text-cloud">4.9/5</span> · 320+ Dearborn reviews
+          </div>
+        </div>
+      </div>
+
+      <div class="lg:col-span-6 relative">
+        <div class="reveal relative rounded-[28px] overflow-hidden shadow-lift ring-1 ring-cloud/10">
+          <img src="images/hero.jpg" data-upload="900x1040" alt="Rouge Valley electrician working on a panel" class="w-full h-[420px] lg:h-[540px] object-cover">
+          <div class="absolute inset-0 bg-gradient-to-t from-ink via-ink/20 to-transparent"></div>
+          <div class="absolute inset-0 bg-copper/20 mix-blend-multiply"></div>
+        </div>
+        <!-- floating stat card -->
+        <div class="reveal absolute -bottom-6 -left-4 sm:-left-6 rounded-2xl bg-cloud p-5 shadow-lift ring-1 ring-ink/5 w-[230px]">
+          <div class="flex items-center gap-3">
+            <span class="grid place-items-center h-11 w-11 rounded-xl bg-ink text-amber">
+              <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg>
+            </span>
+            <div>
+              <div class="font-display font-600 text-[22px] h-tight leading-none">15 yrs</div>
+              <div class="text-[12px] text-slatey mt-1">serving metro Detroit</div>
+            </div>
+          </div>
+        </div>
+        <!-- floating response card -->
+        <div class="reveal absolute -top-5 -right-2 sm:-right-5 rounded-2xl bg-amber p-4 shadow-glow w-[190px]">
+          <div class="font-display font-600 text-ink text-[20px] h-tight leading-none">Same-day</div>
+          <div class="text-[12px] text-ink/70 mt-1.5 font-500">response on most service calls</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- trust strip -->
+    <div class="relative border-t border-cloud/10">
+      <div class="mx-auto max-w-7xl px-6 py-6 grid grid-cols-2 sm:grid-cols-4 gap-y-6 text-cloud/55 text-[13px] font-500 uppercase tracking-[0.14em]">
+        <div class="flex items-center gap-2"><span class="text-amber">✦</span> Master Licensed</div>
+        <div class="flex items-center gap-2"><span class="text-amber">✦</span> Fully Insured</div>
+        <div class="flex items-center gap-2"><span class="text-amber">✦</span> Upfront Pricing</div>
+        <div class="flex items-center gap-2"><span class="text-amber">✦</span> Workmanship Warranty</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SERVICES ============ -->
+  <section id="services" class="relative py-24 lg:py-28">
+    <div class="mx-auto max-w-7xl px-6">
+      <div class="max-w-2xl">
+        <span class="reveal text-[13px] font-600 uppercase tracking-[0.18em] text-amber-700">What we do</span>
+        <h2 class="reveal mt-3 font-display font-600 h-tight text-[36px] sm:text-[44px] leading-[1.05]">Residential & commercial electrical, done right the first time.</h2>
+        <p class="reveal mt-4 text-[17px] text-slatey body-lh">Every job is performed by a licensed electrician, pulled to permit where required, and backed by our workmanship warranty.</p>
+      </div>
+
+      <div class="mt-14 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <!-- card template -->
+        <article class="reveal group relative rounded-3xl bg-white shadow-soft ring-1 ring-ink/5 overflow-hidden transition-all duration-300 ease-spring hover:-translate-y-1 hover:shadow-lift">
+          <div class="relative h-44 overflow-hidden">
+            <img src="images/service-panel.jpg" data-upload="640x420" alt="Breaker panel upgrade" class="h-full w-full object-cover transition-transform duration-500 ease-spring group-hover:scale-105">
+            <div class="absolute inset-0 bg-gradient-to-t from-ink/70 via-ink/10 to-transparent"></div>
+            <div class="absolute inset-0 bg-copper/15 mix-blend-multiply"></div>
+            <span class="absolute bottom-0 left-6 translate-y-1/2 grid place-items-center h-12 w-12 rounded-2xl bg-ink text-amber shadow-lift ring-4 ring-white transition-transform duration-300 ease-spring group-hover:scale-110">
+              <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M9 7h6M9 11h6M9 15h3"/></svg>
+            </span>
+          </div>
+          <div class="p-7 pt-10">
+            <h3 class="font-display font-600 text-[21px] h-tight">Panel Upgrades</h3>
+            <p class="mt-2 text-[15px] text-slatey body-lh">Replace outdated or overloaded panels. Upgrade to 200-amp service for modern homes and added circuits.</p>
+          </div>
+        </article>
+
+        <article class="reveal group relative rounded-3xl bg-white shadow-soft ring-1 ring-ink/5 overflow-hidden transition-all duration-300 ease-spring hover:-translate-y-1 hover:shadow-lift">
+          <div class="relative h-44 overflow-hidden">
+            <img src="images/service-ev.jpg" data-upload="640x420" alt="EV charger installation" class="h-full w-full object-cover transition-transform duration-500 ease-spring group-hover:scale-105">
+            <div class="absolute inset-0 bg-gradient-to-t from-ink/70 via-ink/10 to-transparent"></div>
+            <div class="absolute inset-0 bg-copper/15 mix-blend-multiply"></div>
+            <span class="absolute bottom-0 left-6 translate-y-1/2 grid place-items-center h-12 w-12 rounded-2xl bg-ink text-amber shadow-lift ring-4 ring-white transition-transform duration-300 ease-spring group-hover:scale-110">
+              <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10l-1 4h-3l3 6-8-7h3l-1-3H7z"/></svg>
+            </span>
+          </div>
+          <div class="p-7 pt-10">
+            <h3 class="font-display font-600 text-[21px] h-tight">EV Charger Installs</h3>
+            <p class="mt-2 text-[15px] text-slatey body-lh">Level 2 home charging for Tesla, Ford, and all EVs — dedicated circuit, clean conduit, rebate-ready.</p>
+          </div>
+        </article>
+
+        <article class="reveal group relative rounded-3xl bg-white shadow-soft ring-1 ring-ink/5 overflow-hidden transition-all duration-300 ease-spring hover:-translate-y-1 hover:shadow-lift">
+          <div class="relative h-44 overflow-hidden">
+            <img src="images/service-rewire.jpg" data-upload="640x420" alt="Electrician rewiring a home" class="h-full w-full object-cover transition-transform duration-500 ease-spring group-hover:scale-105">
+            <div class="absolute inset-0 bg-gradient-to-t from-ink/70 via-ink/10 to-transparent"></div>
+            <div class="absolute inset-0 bg-copper/15 mix-blend-multiply"></div>
+            <span class="absolute bottom-0 left-6 translate-y-1/2 grid place-items-center h-12 w-12 rounded-2xl bg-ink text-amber shadow-lift ring-4 ring-white transition-transform duration-300 ease-spring group-hover:scale-110">
+              <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg>
+            </span>
+          </div>
+          <div class="p-7 pt-10">
+            <h3 class="font-display font-600 text-[21px] h-tight">Rewiring & Repairs</h3>
+            <p class="mt-2 text-[15px] text-slatey body-lh">Knob-and-tube replacement, troubleshooting dead outlets, flickering lights, and tripping breakers.</p>
+          </div>
+        </article>
+
+        <article class="reveal group relative rounded-3xl bg-white shadow-soft ring-1 ring-ink/5 overflow-hidden transition-all duration-300 ease-spring hover:-translate-y-1 hover:shadow-lift">
+          <div class="relative h-44 overflow-hidden">
+            <img src="images/service-light.jpg" data-upload="640x420" alt="Lighting and fixture installation" class="h-full w-full object-cover transition-transform duration-500 ease-spring group-hover:scale-105">
+            <div class="absolute inset-0 bg-gradient-to-t from-ink/70 via-ink/10 to-transparent"></div>
+            <div class="absolute inset-0 bg-copper/15 mix-blend-multiply"></div>
+            <span class="absolute bottom-0 left-6 translate-y-1/2 grid place-items-center h-12 w-12 rounded-2xl bg-ink text-amber shadow-lift ring-4 ring-white transition-transform duration-300 ease-spring group-hover:scale-110">
+              <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg>
+            </span>
+          </div>
+          <div class="p-7 pt-10">
+            <h3 class="font-display font-600 text-[21px] h-tight">Lighting & Fixtures</h3>
+            <p class="mt-2 text-[15px] text-slatey body-lh">Recessed lighting, ceiling fans, under-cabinet, landscape and smart lighting installed clean.</p>
+          </div>
+        </article>
+
+        <article class="reveal group relative rounded-3xl bg-white shadow-soft ring-1 ring-ink/5 overflow-hidden transition-all duration-300 ease-spring hover:-translate-y-1 hover:shadow-lift">
+          <div class="relative h-44 overflow-hidden">
+            <img src="images/service-generator.jpg" data-upload="640x420" alt="Whole-home standby generator" class="h-full w-full object-cover transition-transform duration-500 ease-spring group-hover:scale-105">
+            <div class="absolute inset-0 bg-gradient-to-t from-ink/70 via-ink/10 to-transparent"></div>
+            <div class="absolute inset-0 bg-copper/15 mix-blend-multiply"></div>
+            <span class="absolute bottom-0 left-6 translate-y-1/2 grid place-items-center h-12 w-12 rounded-2xl bg-ink text-amber shadow-lift ring-4 ring-white transition-transform duration-300 ease-spring group-hover:scale-110">
+              <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9 12 3l9 6v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 21V12h6v9"/></svg>
+            </span>
+          </div>
+          <div class="p-7 pt-10">
+            <h3 class="font-display font-600 text-[21px] h-tight">Whole-Home Generators</h3>
+            <p class="mt-2 text-[15px] text-slatey body-lh">Standby generator and transfer switch installs so the lights stay on through Michigan storms.</p>
+          </div>
+        </article>
+
+        <article class="reveal group relative rounded-3xl shadow-lift ring-1 ring-ink/40 overflow-hidden flex min-h-[320px]">
+          <img src="images/service-emergency.jpg" data-upload="640x420" alt="Rouge Valley Electric service van" class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-spring group-hover:scale-105">
+          <div class="absolute inset-0 bg-gradient-to-t from-ink via-ink/85 to-ink/40"></div>
+          <div class="absolute inset-0 bg-copper/25 mix-blend-multiply"></div>
+          <div class="relative mt-auto p-7">
+            <span class="grid place-items-center h-12 w-12 rounded-2xl bg-amber text-ink shadow-glow">
+              <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01M10.3 3.3 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.3a2 2 0 0 0-3.4 0Z"/></svg>
+            </span>
+            <h3 class="mt-5 font-display font-600 text-[21px] h-tight text-cloud">24/7 Emergency</h3>
+            <p class="mt-2 text-[15px] text-cloud/80 body-lh">Sparking outlet? Burning smell? No power? We answer the phone day and night across Dearborn.</p>
+            <a href="tel:+13135550148" class="focusring mt-5 inline-flex items-center gap-1.5 text-[15px] font-600 text-amber hover:text-amber-400 transition-colors">Call now <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ WHY US ============ -->
+  <section id="why" class="relative py-24 lg:py-28 bg-ink text-cloud overflow-hidden">
+    <div class="absolute inset-0 grain"></div>
+    <div class="relative mx-auto max-w-7xl px-6 grid lg:grid-cols-2 gap-16 items-center">
+      <div>
+        <span class="reveal text-[13px] font-600 uppercase tracking-[0.18em] text-amber-400">Why Rouge Valley</span>
+        <h2 class="reveal mt-3 font-display font-600 h-tight text-[36px] sm:text-[44px] leading-[1.05]">Neighbors call us back because we make electrical simple.</h2>
+        <p class="reveal mt-5 text-[17px] text-cloud/70 body-lh max-w-xl">No surprise fees, no mess left behind, no upselling. Just a licensed crew that shows up on time and explains the work in plain English.</p>
+
+        <div class="mt-10 grid sm:grid-cols-2 gap-x-8 gap-y-8">
+          <div class="reveal">
+            <div class="font-display font-600 text-[40px] h-tight text-amber leading-none">15+</div>
+            <p class="mt-2 text-[14px] text-cloud/60">Years wiring metro Detroit homes & businesses</p>
+          </div>
+          <div class="reveal">
+            <div class="font-display font-600 text-[40px] h-tight text-amber leading-none">4,000+</div>
+            <p class="mt-2 text-[14px] text-cloud/60">Jobs completed and passed inspection</p>
+          </div>
+          <div class="reveal">
+            <div class="font-display font-600 text-[40px] h-tight text-amber leading-none">100%</div>
+            <p class="mt-2 text-[14px] text-cloud/60">Licensed & insured electricians, every visit</p>
+          </div>
+          <div class="reveal">
+            <div class="font-display font-600 text-[40px] h-tight text-amber leading-none">2-yr</div>
+            <p class="mt-2 text-[14px] text-cloud/60">Workmanship warranty on every installation</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal relative">
+        <div class="relative rounded-[28px] overflow-hidden shadow-lift ring-1 ring-cloud/10">
+          <img src="images/recent-work.jpg" data-upload="720x720" alt="Finished electrical panel" class="w-full h-[460px] object-cover">
+          <div class="absolute inset-0 bg-gradient-to-t from-ink/80 to-transparent"></div>
+          <div class="absolute inset-0 bg-amber/10 mix-blend-multiply"></div>
+        </div>
+        <div class="absolute -bottom-6 right-6 rounded-2xl bg-cloud text-ink p-5 shadow-lift w-[240px]">
+          <div class="flex items-center gap-1 text-amber">
+            <svg viewBox="0 0 24 24" class="h-4 w-4" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z"/></svg>
+            <svg viewBox="0 0 24 24" class="h-4 w-4" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z"/></svg>
+            <svg viewBox="0 0 24 24" class="h-4 w-4" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z"/></svg>
+            <svg viewBox="0 0 24 24" class="h-4 w-4" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z"/></svg>
+            <svg viewBox="0 0 24 24" class="h-4 w-4" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z"/></svg>
+          </div>
+          <p class="mt-2 text-[13px] text-slatey body-lh">"Cleanest panel job I've ever seen. On time, fair price."</p>
+          <p class="mt-2 text-[12px] font-600">— Dana M., Dearborn Heights</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PROCESS ============ -->
+  <section id="process" class="relative py-24 lg:py-28">
+    <div class="mx-auto max-w-7xl px-6">
+      <div class="max-w-2xl">
+        <span class="reveal text-[13px] font-600 uppercase tracking-[0.18em] text-amber-700">How it works</span>
+        <h2 class="reveal mt-3 font-display font-600 h-tight text-[36px] sm:text-[44px] leading-[1.05]">Three steps from problem to power.</h2>
+      </div>
+      <div class="mt-14 grid md:grid-cols-3 gap-6">
+        <div class="reveal relative rounded-3xl bg-white p-8 shadow-soft ring-1 ring-ink/5">
+          <span class="font-display font-600 text-[15px] text-amber-700">01</span>
+          <h3 class="mt-3 font-display font-600 text-[22px] h-tight">Call or request a quote</h3>
+          <p class="mt-2 text-[15px] text-slatey body-lh">Tell us what's going on. We'll give you a clear, upfront estimate — no obligation, no guesswork.</p>
+        </div>
+        <div class="reveal relative rounded-3xl bg-white p-8 shadow-soft ring-1 ring-ink/5">
+          <span class="font-display font-600 text-[15px] text-amber-700">02</span>
+          <h3 class="mt-3 font-display font-600 text-[22px] h-tight">We arrive on schedule</h3>
+          <p class="mt-2 text-[15px] text-slatey body-lh">A licensed electrician shows up in the agreed window, diagnoses on the spot, and confirms the price before any work begins.</p>
+        </div>
+        <div class="reveal relative rounded-3xl bg-white p-8 shadow-soft ring-1 ring-ink/5">
+          <span class="font-display font-600 text-[15px] text-amber-700">03</span>
+          <h3 class="mt-3 font-display font-600 text-[22px] h-tight">Code-perfect & cleaned up</h3>
+          <p class="mt-2 text-[15px] text-slatey body-lh">We finish to code, test everything, haul away debris, and back it with our workmanship warranty.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SERVICE AREA ============ -->
+  <section id="area" class="relative py-24 lg:py-28 bg-white">
+    <div class="mx-auto max-w-7xl px-6 grid lg:grid-cols-2 gap-14 items-center">
+      <div>
+        <span class="reveal text-[13px] font-600 uppercase tracking-[0.18em] text-amber-700">Where we work</span>
+        <h2 class="reveal mt-3 font-display font-600 h-tight text-[36px] sm:text-[44px] leading-[1.05]">Proudly serving Dearborn & Wayne County.</h2>
+        <p class="reveal mt-4 text-[17px] text-slatey body-lh max-w-xl">Based in Dearborn, we cover the surrounding communities with fast, local response.</p>
+        <ul class="reveal mt-8 grid grid-cols-2 sm:grid-cols-3 gap-3 text-[15px] font-500 text-ink/80">
+          <li class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-amber"></span>Dearborn</li>
+          <li class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-amber"></span>Dearborn Heights</li>
+          <li class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-amber"></span>Allen Park</li>
+          <li class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-amber"></span>Melvindale</li>
+          <li class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-amber"></span>Inkster</li>
+          <li class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-amber"></span>Taylor</li>
+          <li class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-amber"></span>Detroit (West)</li>
+          <li class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-amber"></span>Lincoln Park</li>
+          <li class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-amber"></span>Wyandotte</li>
+        </ul>
+      </div>
+      <div class="reveal relative rounded-[28px] overflow-hidden shadow-lift ring-1 ring-ink/5">
+        <img src="images/service-area-map.jpg" data-upload="720x520" alt="Map of Dearborn service area" class="w-full h-[420px] object-cover">
+        <div class="absolute inset-0 bg-gradient-to-t from-ink/50 to-transparent"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ REVIEWS ============ -->
+  <section id="reviews" class="relative py-24 lg:py-28">
+    <div class="mx-auto max-w-7xl px-6">
+      <div class="max-w-2xl">
+        <span class="reveal text-[13px] font-600 uppercase tracking-[0.18em] text-amber-700">Reviews</span>
+        <h2 class="reveal mt-3 font-display font-600 h-tight text-[36px] sm:text-[44px] leading-[1.05]">What Dearborn homeowners say.</h2>
+      </div>
+      <div class="mt-14 grid md:grid-cols-3 gap-6">
+        <figure class="reveal rounded-3xl bg-white p-7 shadow-soft ring-1 ring-ink/5">
+          <div class="flex items-center gap-1 text-amber">
+            <svg viewBox="0 0 24 24" class="h-4 w-4" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z"/></svg><svg viewBox="0 0 24 24" class="h-4 w-4" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z"/></svg><svg viewBox="0 0 24 24" class="h-4 w-4" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z"/></svg><svg viewBox="0 0 24 24" class="h-4 w-4" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z"/></svg><svg viewBox="0 0 24 24" class="h-4 w-4" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z"/></svg>
+          </div>
+          <blockquote class="mt-4 text-[15px] text-ink/80 body-lh">"Our panel was a fire hazard from the 70s. They upgraded us to 200-amp in a day, pulled the permit, and walked me through everything. Felt safe again."</blockquote>
+          <figcaption class="mt-5 flex items-center gap-3">
+            <img class="h-10 w-10 rounded-full object-cover" src="images/review-ahmed.jpg" data-upload="80x80" alt="">
+            <div><div class="font-600 text-[14px]">Ahmed K.</div><div class="text-[12px] text-slatey">Dearborn, MI</div></div>
+          </figcaption>
+        </figure>
+        <figure class="reveal rounded-3xl bg-white p-7 shadow-soft ring-1 ring-ink/5">
+          <div class="flex items-center gap-1 text-amber">
+            <svg viewBox="0 0 24 24" class="h-4 w-4" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z"/></svg><svg viewBox="0 0 24 24" class="h-4 w-4" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z"/></svg><svg viewBox="0 0 24 24" class="h-4 w-4" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z"/></svg><svg viewBox="0 0 24 24" class="h-4 w-4" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z"/></svg><svg viewBox="0 0 24 24" class="h-4 w-4" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z"/></svg>
+          </div>
+          <blockquote class="mt-4 text-[15px] text-ink/80 body-lh">"Installed our Tesla charger in the garage — clean conduit, no mess, and helped me file for the rebate. Fair, honest pricing."</blockquote>
+          <figcaption class="mt-5 flex items-center gap-3">
+            <img class="h-10 w-10 rounded-full object-cover" src="images/review-jenna.jpg" data-upload="80x80" alt="">
+            <div><div class="font-600 text-[14px]">Jenna R.</div><div class="text-[12px] text-slatey">Allen Park, MI</div></div>
+          </figcaption>
+        </figure>
+        <figure class="reveal rounded-3xl bg-white p-7 shadow-soft ring-1 ring-ink/5">
+          <div class="flex items-center gap-1 text-amber">
+            <svg viewBox="0 0 24 24" class="h-4 w-4" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z"/></svg><svg viewBox="0 0 24 24" class="h-4 w-4" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z"/></svg><svg viewBox="0 0 24 24" class="h-4 w-4" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z"/></svg><svg viewBox="0 0 24 24" class="h-4 w-4" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z"/></svg><svg viewBox="0 0 24 24" class="h-4 w-4" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z"/></svg>
+          </div>
+          <blockquote class="mt-4 text-[15px] text-ink/80 body-lh">"Called at 11pm with a burning smell from an outlet. They talked me through shutting the breaker and were out first thing. Lifesavers."</blockquote>
+          <figcaption class="mt-5 flex items-center gap-3">
+            <img class="h-10 w-10 rounded-full object-cover" src="images/review-marcus.jpg" data-upload="80x80" alt="">
+            <div><div class="font-600 text-[14px]">Marcus T.</div><div class="text-[12px] text-slatey">Dearborn Heights, MI</div></div>
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ QUOTE / CTA ============ -->
+  <section id="quote" class="relative py-24 lg:py-28 bg-ink text-cloud overflow-hidden">
+    <div class="absolute inset-0 field"></div>
+    <div class="absolute inset-0 grain"></div>
+    <div class="relative mx-auto max-w-6xl px-6 grid lg:grid-cols-2 gap-14 items-center">
+      <div>
+        <span class="reveal text-[13px] font-600 uppercase tracking-[0.18em] text-amber-400">Free estimate</span>
+        <h2 class="reveal mt-3 font-display font-600 h-tight text-[38px] sm:text-[46px] leading-[1.03]">Let's get your power sorted.</h2>
+        <p class="reveal mt-5 text-[17px] text-cloud/70 body-lh max-w-md">Send a few details and we'll get back to you fast — usually within the hour during business hours. Need help now? Call us.</p>
+        <div class="reveal mt-8 space-y-4 text-[15px]">
+          <a href="tel:+13135550148" class="focusring flex items-center gap-3 hover:text-amber-400 transition-colors">
+            <span class="grid place-items-center h-10 w-10 rounded-xl bg-cloud/10"><svg viewBox="0 0 24 24" class="h-5 w-5 text-amber" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/></svg></span>
+            (313) 555-0148
+          </a>
+          <div class="flex items-center gap-3 text-cloud/80">
+            <span class="grid place-items-center h-10 w-10 rounded-xl bg-cloud/10"><svg viewBox="0 0 24 24" class="h-5 w-5 text-amber" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="m22 6-10 7L2 6"/></svg></span>
+            service@rougevalleyelectric.com
+          </div>
+          <div class="flex items-center gap-3 text-cloud/80">
+            <span class="grid place-items-center h-10 w-10 rounded-xl bg-cloud/10"><svg viewBox="0 0 24 24" class="h-5 w-5 text-amber" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0Z"/><circle cx="12" cy="10" r="3"/></svg></span>
+            Dearborn, Michigan · Mon–Sat 7am–7pm
+          </div>
+        </div>
+      </div>
+
+      <form class="reveal rounded-3xl bg-cloud text-ink p-7 sm:p-8 shadow-lift" onsubmit="event.preventDefault(); this.reset(); document.getElementById('sent').classList.remove('hidden');">
+        <div class="grid sm:grid-cols-2 gap-4">
+          <label class="block">
+            <span class="text-[13px] font-600 text-ink/70">Name</span>
+            <input required type="text" placeholder="Jane Doe" class="focusring mt-1.5 w-full rounded-xl border border-ink/10 bg-white px-4 py-3 text-[15px] placeholder:text-slatey/60 focus:border-amber transition-colors">
+          </label>
+          <label class="block">
+            <span class="text-[13px] font-600 text-ink/70">Phone</span>
+            <input required type="tel" placeholder="(313) 555-0148" class="focusring mt-1.5 w-full rounded-xl border border-ink/10 bg-white px-4 py-3 text-[15px] placeholder:text-slatey/60 focus:border-amber transition-colors">
+          </label>
+        </div>
+        <label class="block mt-4">
+          <span class="text-[13px] font-600 text-ink/70">Email</span>
+          <input type="email" placeholder="you@email.com" class="focusring mt-1.5 w-full rounded-xl border border-ink/10 bg-white px-4 py-3 text-[15px] placeholder:text-slatey/60 focus:border-amber transition-colors">
+        </label>
+        <label class="block mt-4">
+          <span class="text-[13px] font-600 text-ink/70">What do you need?</span>
+          <select class="focusring mt-1.5 w-full rounded-xl border border-ink/10 bg-white px-4 py-3 text-[15px] focus:border-amber transition-colors">
+            <option>Panel upgrade</option>
+            <option>EV charger install</option>
+            <option>Rewiring / repair</option>
+            <option>Lighting & fixtures</option>
+            <option>Generator install</option>
+            <option>Emergency service</option>
+            <option>Other</option>
+          </select>
+        </label>
+        <label class="block mt-4">
+          <span class="text-[13px] font-600 text-ink/70">Details</span>
+          <textarea rows="3" placeholder="Tell us a bit about the job…" class="focusring mt-1.5 w-full rounded-xl border border-ink/10 bg-white px-4 py-3 text-[15px] placeholder:text-slatey/60 focus:border-amber transition-colors"></textarea>
+        </label>
+        <button type="submit" class="focusring group mt-6 w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-ink px-6 py-4 text-[16px] font-600 text-cloud shadow-lift transition-all duration-300 ease-spring hover:-translate-y-0.5 active:translate-y-0">
+          Request My Free Quote
+          <svg viewBox="0 0 24 24" class="h-5 w-5 transition-transform duration-300 ease-spring group-hover:translate-x-1" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+        <p id="sent" class="hidden mt-4 text-center text-[14px] font-600 text-amber-700">Thanks! We'll be in touch shortly. ⚡</p>
+      </form>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="bg-ink-800 text-cloud/70 border-t border-cloud/10">
+    <div class="mx-auto max-w-7xl px-6 py-14 grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
+      <div class="lg:col-span-2 max-w-sm">
+        <div class="flex items-center gap-3">
+          <span class="grid place-items-center h-10 w-10 rounded-xl bg-ink text-amber"><svg viewBox="0 0 24 24" class="h-5 w-5" fill="currentColor"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"/></svg></span>
+          <span class="font-display font-600 text-[18px] text-cloud h-tight">Rouge Valley Electric</span>
+        </div>
+        <p class="mt-4 text-[15px] body-lh">Licensed & insured electricians serving Dearborn and Wayne County for over 15 years. Honest work, fair prices, zero surprises.</p>
+      </div>
+      <div>
+        <h4 class="text-[13px] font-600 uppercase tracking-[0.16em] text-cloud/50">Services</h4>
+        <ul class="mt-4 space-y-2.5 text-[15px]">
+          <li><a href="#services" class="focusring hover:text-amber transition-colors">Panel Upgrades</a></li>
+          <li><a href="#services" class="focusring hover:text-amber transition-colors">EV Chargers</a></li>
+          <li><a href="#services" class="focusring hover:text-amber transition-colors">Rewiring & Repair</a></li>
+          <li><a href="#services" class="focusring hover:text-amber transition-colors">Emergency Service</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-[13px] font-600 uppercase tracking-[0.16em] text-cloud/50">Contact</h4>
+        <ul class="mt-4 space-y-2.5 text-[15px]">
+          <li><a href="tel:+13135550148" class="focusring hover:text-amber transition-colors">(313) 555-0148</a></li>
+          <li><a href="mailto:service@rougevalleyelectric.com" class="focusring hover:text-amber transition-colors">Email us</a></li>
+          <li>Dearborn, Michigan</li>
+          <li>Mon–Sat · 7am–7pm</li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-cloud/10">
+      <div class="mx-auto max-w-7xl px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-[13px] text-cloud/45">
+        <p>© 2026 Rouge Valley Electric, LLC. License #62-XXXXX. All rights reserved.</p>
+        <p>Serving Dearborn · Dearborn Heights · Allen Park · Taylor · West Detroit</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Image upload helper:
+    // Each <img data-upload="WxH"> points at a local file in /images.
+    // Until that file exists, show a labeled "Upload → images/…" placeholder.
+    // Drop a photo with the matching filename into the images/ folder and it appears automatically.
+    document.querySelectorAll('img[data-upload]').forEach((img) => {
+      const dims = img.getAttribute('data-upload');
+      const file = img.getAttribute('src');
+      img.addEventListener('error', function handle() {
+        img.removeEventListener('error', handle); // prevent loop
+        const label = encodeURIComponent('⬆ Upload → ' + file + '  (' + dims + ')');
+        img.src = 'https://placehold.co/' + dims + '/161d2b/f8b94f?text=' + label;
+      });
+    });
+
+    // scroll-reveal
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    const revealEls = document.querySelectorAll('.reveal');
+    revealEls.forEach((el, i) => {
+      el.style.transitionDelay = (Math.min(i % 6, 5) * 60) + 'ms';
+      io.observe(el);
+    });
+    // Safety net: never leave content permanently hidden if the observer
+    // misses an element (e.g. full-page capture) or fires late.
+    window.addEventListener('load', () => {
+      setTimeout(() => revealEls.forEach(el => el.classList.add('in')), 600);
+    });
+</script>
+</body>
+</html>
